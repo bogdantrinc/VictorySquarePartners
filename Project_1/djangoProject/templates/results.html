@@ -3,30 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Forms</title>
+    <title>Results</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+    <link rel="stylesheet" href="results.css">
 </head>
 <body>
     <br>
-    <h1 class="text-center">Pop quiz!</h1>
+    <h1 class="text-center">Here are the correct answers:</h1>
     <br>
     <div class="container d-grid gap-3 col-6 mx-auto">
 
         <h5><strong>What is a correct syntax to output "Hello World!" in Python?</strong></h5>
         <div class="form-check">
-            <input class="form-check-input" type="radio" name="button_1" id="button_11">
+            <input class="form-check-input" type="radio" name="button_1" id="button_11" style="background-color: green" disabled>
             <label class="form-check-label" for="button_11">
             print("Hello World!")
             </label>
         </div>
         <div class="form-check">
-            <input class="form-check-input" type="radio" name="button_1" id="button_12">
+            <input class="form-check-input" type="radio" name="button_1" id="button_12" style="background-color: red" disabled>
             <label class="form-check-label" for="button_12">
             p("Hello World")
             </label>
         </div>
         <div class="form-check">
-            <input class="form-check-input" type="radio" name="button_1" id="button_13">
+            <input class="form-check-input" type="radio" name="button_1" id="button_13" style="background-color: red" disabled>
             <label class="form-check-label" for="button_13">
             echo("Hello World");
             </label>
@@ -34,19 +35,19 @@
 
         <h5><strong>How do you insert COMMENTS in Python code?</strong></h5>
         <div class="form-check">
-            <input class="form-check-input" type="radio" name="button_2" id="button_21">
+            <input class="form-check-input" type="radio" name="button_2" id="button_21" style="background-color: red" disabled>
             <label class="form-check-label" for="button_21">
             //This is a comment
             </label>
         </div>
         <div class="form-check">
-            <input class="form-check-input" type="radio" name="button_2" id="button_22">
+            <input class="form-check-input" type="radio" name="button_2" id="button_22" style="background-color: green" disabled>
             <label class="form-check-label" for="button_22">
             #This is a comment
             </label>
         </div>
         <div class="form-check">
-            <input class="form-check-input" type="radio" name="button_2" id="button_23">
+            <input class="form-check-input" type="radio" name="button_2" id="button_23" style="background-color: red" disabled>
             <label class="form-check-label" for="button_23">
             /*This is a comment*/
             </label>
@@ -54,19 +55,19 @@
 
         <h5><strong>What is the correct file extension for Python files?</strong></h5>
         <div class="form-check">
-            <input class="form-check-input" type="radio" name="button_3" id="button_31">
+            <input class="form-check-input" type="radio" name="button_3" id="button_31" style="background-color: red" disabled>
             <label class="form-check-label" for="button_31">
             .pyth
             </label>
         </div>
         <div class="form-check">
-            <input class="form-check-input" type="radio" name="button_3" id="button_32">
+            <input class="form-check-input" type="radio" name="button_3" id="button_32" style="background-color: red" disabled>
             <label class="form-check-label" for="button_32">
             .pt
             </label>
         </div>
         <div class="form-check">
-            <input class="form-check-input" type="radio" name="button_3" id="button_33">
+            <input class="form-check-input" type="radio" name="button_3" id="button_33" style="background-color: green" disabled>
             <label class="form-check-label" for="button_33">
             .py
             </label>
@@ -74,29 +75,30 @@
 
         <h5><strong>What is the correct syntax to output the type of a variable or object in Python?</strong></h5>
         <div class="form-check">
-            <input class="form-check-input" type="radio" name="button_4" id="button_41">
+            <input class="form-check-input" type="radio" name="button_4" id="button_41" style="background-color: green" disabled>
             <label class="form-check-label" for="button_41">
             print(type(x))
             </label>
         </div>
         <div class="form-check">
-            <input class="form-check-input" type="radio" name="button_4" id="button_42">
+            <input class="form-check-input" type="radio" name="button_4" id="button_42" style="background-color: red" disabled>
             <label class="form-check-label" for="button_42">
             print(typeof(x))
             </label>
         </div>
         <div class="form-check">
-            <input class="form-check-input" type="radio" name="button_4" id="button_43">
+            <input class="form-check-input" type="radio" name="button_4" id="button_43" style="background-color: red" disabled>
             <label class="form-check-label" for="button_43">
             print(type x)
             </label>
         </div>
     </div>
-    <a href="results.html" class="d-grid col-6 mx-auto">
+    <div class="d-grid col-6 mx-auto">
         <br>
-        <label class="btn btn-primary" for="btn-check">Send quiz</label>
+        <label class="alert alert-primary text-center" role="alert"><strong>You scored 4 points!</strong></label>
         <br>
-    </a>
+    </div>
+    <br>
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
