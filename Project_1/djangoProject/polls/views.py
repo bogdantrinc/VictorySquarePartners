@@ -6,10 +6,6 @@ from django.urls import reverse
 from polls.models import Question, Choice
 
 
-# def index(request):
-#     return HttpResponse("Hello, world. You're at the polls index.")
-
-
 def index(request):
     latest_question_list = Question.objects.order_by('-pub_date')[:5]
     context = {'latest_question_list': latest_question_list}
@@ -38,6 +34,6 @@ def vote(request, question_id):
     else:
         selected_choice.votes += 1
         selected_choice.save()
-        return  HttpResponseRedirect(reverse('polls:results', args=(question_id,)))
+        return HttpResponseRedirect(reverse('polls:results', args=(question_id,)))
 
 # Create your views here.
