@@ -1,5 +1,7 @@
+from django.shortcuts import get_object_or_404
 from django.views import generic
 from cars.models import Car
+import inspect
 
 
 class IndexView(generic.ListView):
@@ -19,5 +21,17 @@ class DetailView(generic.DetailView):
 
     def get_queryset(self):
         return Car.objects.all()
+
+
+# def detail(request, car_id):
+#     """
+#     Return a list with all the valid attributes of a car.
+#     """
+#     car = get_object_or_404(Car, pk=car_id)
+#     for _ in inspect.getmembers(car):
+#         if not _[0].startswith('_'):
+#             if not inspect.ismethod(_[1]):
+#                 return _
+
 
 # Create your views here.

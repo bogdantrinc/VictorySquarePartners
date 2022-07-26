@@ -8,8 +8,8 @@ class Car(models.Model):
     car_vin = models.CharField(max_length=17, unique=True,
                                error_messages={"unique": "This car VIN already exists."},
                                validators=[MinLengthValidator(17, "The car VIN has a 17 characters format!"),
-                                           RegexValidator(r'^[a-zA-Z0-9]*$',
-                                                          'The car VIN has only letters and numbers!')])
+                                           RegexValidator(r'^[A-Z0-9]*$',
+                                                          'The car VIN has only numbers and capital letters!')])
     date_added = models.DateTimeField('date added', auto_now_add=True)
     title = models.CharField(max_length=100, null=True)
     description = models.TextField(max_length=500, null=True)
