@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Car Details | {{ car.car_vin }}</title>
+    <link rel="icon" type="image/svg" href="https://upload.wikimedia.org/wikipedia/commons/c/c3/Python-logo-notext.svg">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+</head>
+<body>
+<div class="container d-grid col-5 mx-auto">
+    <br>
+    <h1 class="text-center">Car Details</h1>
+    <br>
+    <label><strong>VIN: </strong>{{ car.car_vin }}</label><br>
+    <label><strong>Maker: </strong>{{ car.car_maker }}</label><br>
+    <label><strong>Model: </strong>{{ car.car_model }}</label><br>
+    <input type="submit" value="Fetch more details">
+</div>
+</body>
+</html>
