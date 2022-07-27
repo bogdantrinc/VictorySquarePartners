@@ -16,12 +16,10 @@
     <label><strong>VIN: </strong>{{ car.car_vin }}</label><br>
     <label><strong>Maker: </strong>{{ car.car_maker }}</label><br>
     <label><strong>Model: </strong>{{ car.car_model }}</label><br>
-    <input type="submit" value="Fetch more details"><br>
+    <input id="buton" type="submit" value="Fetch more details"><br>
 
-    <legend><h1>{{ car.car_vin }}</h1></legend>
-{#    {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}#}
-    {% for detail in car_details %}
-        <label>{{ detail }}</label><br>
+    {% for detail_name, detail in car.detail %}
+        <label>{{ detail_name }}: {{ detail }}</label><br>
     {% endfor %}
 
 </div>
