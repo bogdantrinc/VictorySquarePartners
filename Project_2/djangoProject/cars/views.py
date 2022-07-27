@@ -1,7 +1,6 @@
 from django.shortcuts import get_object_or_404, render
 from django.views import generic
 from cars.models import Car
-import inspect
 
 
 class IndexView(generic.ListView):
@@ -21,6 +20,25 @@ class DetailView(generic.DetailView):
 
     def get_queryset(self):
         return Car.objects.all()
+
+
+def more_details(request, pk):
+    car = get_object_or_404(Car, pk=pk)
+    try:
+        detail = Car.objects.filter(pk=pk).values()[0]
+    except (KeyError, Car.DoesNotExist):
+        return render(request, 'cars/detail.html', {
+            'car': car,
+        })
+    else:
+        car_detail = {}
+        for name_detail, detail in detail.items():
+            if detail and detail != 'No data.':
+                car_detail[name_detail] = detail
+        return render(request, 'cars/detail.html', {
+            'car': car,
+            'car_detail': car_detail
+        })
 
 
 # Create your views here.

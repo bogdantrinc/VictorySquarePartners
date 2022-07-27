@@ -51,14 +51,13 @@ class Car(models.Model):
     def __str__(self):
         return self.car_vin
 
-    def detail(self):
-        detail = [[str(_).replace('cars.Car.', ''),
-                   self.__getattribute__(f'{str(_).replace("cars.Car.", "")}')] for _ in self._meta.fields]
-        clear_detail = []
-        for i, j in detail:
-            if j and j != 'No data.':
-                clear_detail.append((i, j))
-        return clear_detail
+    # def detail(self):
+    #     detail = Car.objects.filter(pk=self.id).values()[0]
+    #     clear_detail = {}
+    #     for name_detail, detail in detail.items():
+    #         if detail and detail != 'No data.':
+    #             clear_detail[name_detail] = detail
+    #     return clear_detail
 
 
 class CarAdmin(admin.ModelAdmin):
