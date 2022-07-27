@@ -23,15 +23,17 @@ class DetailView(generic.DetailView):
         return Car.objects.all()
 
 
-# def detail(request, car_id):
-#     """
-#     Return a list with all the valid attributes of a car.
-#     """
-#     car = get_object_or_404(Car, pk=car_id)
-#     for _ in inspect.getmembers(car):
-#         if not _[0].startswith('_'):
-#             if not inspect.ismethod(_[1]):
-#                 return _
+def detail(request, car_id):
+    """
+    Return a list with all the valid attributes of a car.
+    """
+    car = get_object_or_404(Car, pk=car_id)
+    car_details = []
+    for _ in inspect.getmembers(car):
+        if not _[0].startswith('_'):
+            if not inspect.ismethod(_[1]):
+                car_details.append(_)
+    return car_details
 
 
 # Create your views here.

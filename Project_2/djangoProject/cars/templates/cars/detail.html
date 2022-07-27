@@ -18,17 +18,11 @@
     <label><strong>Model: </strong>{{ car.car_model }}</label><br>
     <input type="submit" value="Fetch more details"><br>
 
-{#    <form action="{% url 'cars:detail' car.id %}" method="post">#}
-{#    {% csrf_token %}#}
-{#    <fieldset>#}
-{#    <legend><h3>{{ car.car_vin }}</h3></legend>#}
+    <legend><h1>{{ car.car_vin }}</h1></legend>
 {#    {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}#}
-{#    {% for detail in  %}#}
-{#        <input type="radio" name="choice" id="choice{{ forloop.counter }}" value="{{ choice.id }}">#}
-{#        <label for="choice{{ forloop.counter }}">{{ choice.choice_text }}</label><br>#}
-{#    {% endfor %}#}
-{#    </fieldset>#}
-{#    </form>#}
+    {% for detail in car_details %}
+        <label>{{ detail }}</label><br>
+    {% endfor %}
 
 </div>
 </body>
