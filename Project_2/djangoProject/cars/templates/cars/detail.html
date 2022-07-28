@@ -17,14 +17,11 @@
     <label><strong>Maker: </strong>{{ car.car_maker }}</label><br>
     <label><strong>Model: </strong>{{ car.car_model }}</label><br>
 
-{#    {% for name_detail, detail in car.detail.items %}#}
-{#        <label>{{ name_detail }}: {{ detail }}</label><br>#}
-{#    {% endfor %}#}
-
-    <form action="{% url 'cars:more' car.id %}" method="post">
-        {% csrf_token %}
+    <form action="{% url 'cars:more' car.id %}" method="get">
         {% for name_detail, detail in car_detail.items %}
-            <label>{{ name_detail }}: {{ detail }}</label><br>
+            {% if detail %}
+                <label>{{ name_detail }}: {{ detail }}</label><br>
+            {% endif %}
         {% endfor %}
         <input type="submit" value="Fetch more details" class="container d-grid"><br>
     </form>

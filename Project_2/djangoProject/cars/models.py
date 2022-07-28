@@ -16,8 +16,8 @@ class Car(models.Model):
     year = models.PositiveSmallIntegerField(validators=[MaxValueValidator(timezone.now().year),
                                                         MinValueValidator(1900)],
                                             null=True)
-    car_maker = models.CharField(max_length=100)
-    car_model = models.CharField(max_length=100)
+    car_maker = models.CharField(max_length=100, default='')
+    car_model = models.CharField(max_length=100, default='')
     car_trim = models.CharField(max_length=100, default='')
     mileage = models.PositiveIntegerField(null=True)
     mileage_unit = models.CharField(max_length=100, default='')
@@ -50,14 +50,6 @@ class Car(models.Model):
 
     def __str__(self):
         return self.car_vin
-
-    # def detail(self):
-    #     detail = Car.objects.filter(pk=self.id).values()[0]
-    #     clear_detail = {}
-    #     for name_detail, detail in detail.items():
-    #         if detail and detail != 'No data.':
-    #             clear_detail[name_detail] = detail
-    #     return clear_detail
 
 
 class CarAdmin(admin.ModelAdmin):

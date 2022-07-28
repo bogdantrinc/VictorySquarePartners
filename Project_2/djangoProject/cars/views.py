@@ -25,16 +25,12 @@ class DetailView(generic.DetailView):
 def more_details(request, pk):
     car = get_object_or_404(Car, pk=pk)
     try:
-        detail = Car.objects.filter(pk=pk).values()[0]
+        car_detail = Car.objects.filter(pk=pk).values()[0]
     except (KeyError, Car.DoesNotExist):
         return render(request, 'cars/detail.html', {
             'car': car,
         })
     else:
-        car_detail = {}
-        for name_detail, detail in detail.items():
-            if detail and detail != 'No data.':
-                car_detail[name_detail] = detail
         return render(request, 'cars/detail.html', {
             'car': car,
             'car_detail': car_detail
