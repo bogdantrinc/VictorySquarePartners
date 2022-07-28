@@ -18,7 +18,7 @@ class Car(models.Model):
                                             null=True)
     car_maker = models.CharField(max_length=100, default='')
     car_model = models.CharField(max_length=100, default='')
-    car_trim = models.CharField(max_length=100, default='')
+    trim = models.CharField(max_length=100, default='')
     mileage = models.PositiveIntegerField(null=True)
     mileage_unit = models.CharField(max_length=100, default='')
     transmission_type = models.CharField(max_length=100, default='')

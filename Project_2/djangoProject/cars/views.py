@@ -1,6 +1,13 @@
 from django.shortcuts import get_object_or_404, render
 from django.views import generic
 from cars.models import Car
+global detail_list
+detail_list = ['title', 'description', 'year', 'trim', 'mileage', 'mileage_unit', 'transmission_type', 'fuel_type',
+               'body_style', 'drivetrain', 'interior_color', 'exterior_color', 'doors', 'cylinders', 'displacement',
+               'msrp', 'state_of_vehicle', 'grouped_exterior_color', 'grouped_interior_color', 'engine',
+               'fuel_economy_city', 'fuel_economy_city_unit', 'fuel_economy_highway', 'fuel_economy_highway_unit',
+               'availability', 'image_url', 'normalized_make', 'grouped_body_style', 'grouped_transmission_type',
+               'sale_price', 'url', 'stock_number']
 
 
 class IndexView(generic.ListView):
@@ -25,7 +32,7 @@ class DetailView(generic.DetailView):
 def more_details(request, pk):
     car = get_object_or_404(Car, pk=pk)
     try:
-        car_detail = Car.objects.filter(pk=pk).values()[0]
+        car_detail = Car.objects.filter(pk=pk).values(*detail_list)[0]
     except (KeyError, Car.DoesNotExist):
         return render(request, 'cars/detail.html', {
             'car': car,
