@@ -13,23 +13,20 @@
     <br>
     <h1 class="text-center">Car Details</h1>
     <br>
-    <label><strong>VIN: </strong>{{ car.car_vin }}</label><br>
-    <label><strong>Maker: </strong>{{ car.car_maker }}</label><br>
-    <label><strong>Model: </strong>{{ car.car_model }}</label><br>
-    <input type="submit" value="Fetch more details"><br>
+    <label><strong>VIN: </strong>{{ car.vin }}</label><br>
+    <label><strong>Maker: </strong>{{ car.make }}</label><br>
+    <label><strong>Model: </strong>{{ car.model }}</label><br>
 
-{#    <form action="{% url 'cars:detail' car.id %}" method="post">#}
-{#    {% csrf_token %}#}
-{#    <fieldset>#}
-{#    <legend><h3>{{ car.car_vin }}</h3></legend>#}
-{#    {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}#}
-{#    {% for detail in  %}#}
-{#        <input type="radio" name="choice" id="choice{{ forloop.counter }}" value="{{ choice.id }}">#}
-{#        <label for="choice{{ forloop.counter }}">{{ choice.choice_text }}</label><br>#}
-{#    {% endfor %}#}
-{#    </fieldset>#}
-{#    </form>#}
+    <form action="{% url 'cars:more' car.id %}" method="get">
+        {% for name_detail, detail in car_detail.items %}
+            {% if detail %}
+                <label>{{ name_detail }}: {{ detail }}</label><br>
+            {% endif %}
+        {% endfor %}
+        <input type="submit" value="Fetch more details" class="container d-grid"><br>
+    </form>
 
 </div>
+<br>
 </body>
 </html>
