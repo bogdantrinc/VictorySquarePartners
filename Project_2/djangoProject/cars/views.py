@@ -19,6 +19,15 @@ class IndexView(generic.ListView):
         """
         return Car.objects.all()
 
+    # def refresh_data(self):
+    #     with open(r'C:\Users\Bogdan\PycharmProjects\VictorySquarePartners\Project_2\djangoProject\cars\templates\cars\hutto.json') as json_file:
+    #         car_vin_list = json.load(json_file)
+    #     for _ in car_vin_list:
+    #         try:
+    #             Car.objects.create(car_vin=_)
+    #         except django.db.IntegrityError:
+    #             pass
+
 
 class DetailView(generic.DetailView):
     model = Car
