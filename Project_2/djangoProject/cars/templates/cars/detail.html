@@ -13,9 +13,9 @@
     <br>
     <h1 class="text-center">Car Details</h1>
     <br>
-    <label><strong>VIN: </strong>{{ car.car_vin }}</label><br>
-    <label><strong>Maker: </strong>{{ car.car_maker }}</label><br>
-    <label><strong>Model: </strong>{{ car.car_model }}</label><br>
+    <label><strong>VIN: </strong>{{ car.vin }}</label><br>
+    <label><strong>Maker: </strong>{{ car.make }}</label><br>
+    <label><strong>Model: </strong>{{ car.model }}</label><br>
 
     <form action="{% url 'cars:more' car.id %}" method="get">
         {% for name_detail, detail in car_detail.items %}

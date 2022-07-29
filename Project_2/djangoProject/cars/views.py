@@ -1,7 +1,6 @@
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import render
 from django.views import generic
 from cars.models import Car
-global detail_list
 detail_list = ['title', 'description', 'year', 'trim', 'mileage', 'mileage_unit', 'transmission_type', 'fuel_type',
                'body_style', 'drivetrain', 'interior_color', 'exterior_color', 'doors', 'cylinders', 'displacement',
                'msrp', 'state_of_vehicle', 'grouped_exterior_color', 'grouped_interior_color', 'engine',
@@ -30,9 +29,10 @@ class DetailView(generic.DetailView):
 
 
 def more_details(request, pk):
-    car = get_object_or_404(Car, pk=pk)
+    car_queryset = Car.objects.filter(pk=pk)
+    car = car_queryset.first()
     try:
-        car_detail = Car.objects.filter(pk=pk).values(*detail_list)[0]
+        car_detail = car_queryset.values(*detail_list)[0]
     except (KeyError, Car.DoesNotExist):
         return render(request, 'cars/detail.html', {
             'car': car,
