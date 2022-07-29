@@ -18,11 +18,11 @@
     <ul>
         <h5>Vehicle Identification number (VIN):</h5>
         {% for car in car_list %}
-        <li><a href="{% url 'cars:detail' car.id %}">{{ car.vin }}</a></li>
+            <li><a href="{% url 'cars:detail' car.id %}">{{ car.vin }}</a></li>
         {% endfor %}
     </ul>
     {% else %}
-    <p>No cars are available.</p>
+        <p>No cars are available.</p>
     {% endif %}
 
 </div>
