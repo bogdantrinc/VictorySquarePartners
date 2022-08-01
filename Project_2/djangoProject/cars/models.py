@@ -5,7 +5,7 @@ from django.utils import timezone
 
 
 class Car(models.Model):
-    vin = models.CharField(max_length=17, unique=True,
+    vin = models.CharField(max_length=17, unique=True, default='',
                            error_messages={"unique": "This car VIN already exists."},
                            validators=[MinLengthValidator(17, "The car VIN has a 17 characters format!"),
                                        RegexValidator(r'^[A-Z0-9]*$',
