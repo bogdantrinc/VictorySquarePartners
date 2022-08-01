@@ -44,15 +44,25 @@ class CarIndexViewTests(TestCase):
 class CarDetailViewTests(TestCase):
     def test_details(self):
         """
-        The page should show basic details of a car.
+        The page should show the proper vin.
         """
         Car.objects.all().delete()
         car1 = Car.objects.create(vin='3GNKBKRS1LS573917')
         url = reverse('cars:detail', args=(car1.id,))
         response = self.client.get(url)
         self.assertContains(response, car1.vin)
-        self.assertContains(response, car1.make)
-        self.assertContains(response, car1.model)
+
+    def test_details_same_as_created(self):
+        """
+        The page should show basic details of a car.
+        """
+        Car.objects.all().delete()
+        car1 = Car.objects.create(vin='4T1KZ1AK5MU050696', make='Toyota', model='Camry')
+        url = reverse('cars:detail', args=(car1.id,))
+        response = self.client.get(url)
+        self.assertContains(response, '4T1KZ1AK5MU050696')
+        self.assertContains(response, 'Toyota')
+        self.assertContains(response, 'Camry')
 
 
 class MoreDetailsViewTests(TestCase):
@@ -97,8 +107,19 @@ class MoreDetailsViewTests(TestCase):
                                   )
         url = reverse('cars:more', args=(car1.id,))
         response = self.client.get(url)
-        for _ in detail_list:
-            self.assertContains(response, car1.__getattribute__(_))
+        for attribute in detail_list:
+            self.assertContains(response, getattr(car1, attribute))
+
+    def test_more_details_errors(self):
+        """
+        The page should show a message error.
+        """
+        Car.objects.all().delete()
+        # car1 = Car.objects.create(vin='4T1KZ1AK5MU050696')
+        # url = reverse('cars:more', args=(car1.id,))
+        # response = self.client.get(url)
+        # self.assertContains(response, car1.vin)
+        # self.assertContains(response, "Something went wrong.")
 
 
 # Create your tests here.

@@ -36,6 +36,7 @@ def more_details(request, pk):
     except (KeyError, Car.DoesNotExist):
         return render(request, 'cars/detail.html', {
             'car': car,
+            'error_message': "Something went wrong."
         })
     else:
         return render(request, 'cars/detail.html', {

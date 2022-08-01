@@ -18,6 +18,7 @@
     <label><strong>Model: </strong>{{ car.model }}</label><br>
 
     <form action="{% url 'cars:more' car.id %}" method="get">
+        {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
         {% for name_detail, detail in car_detail.items %}
             {% if detail %}
                 <label>{{ name_detail }}: {{ detail }}</label><br>
