@@ -2,7 +2,7 @@ body {
   background-color: #181818;
 }
 
-h1.page_title {
+h1.page_title, h1.detail_title {
   background-color: white;
   padding: 4px;
 }
@@ -20,9 +20,21 @@ div.car_list {
   max-height: 600px;
 }
 
+div.car_details {
+  padding: 25px;
+  overflow: auto;
+  height: auto;
+  max-height: 600px;
+}
+
 input[type="text"] {
   width: 80%;
   padding: 7px;
+}
+
+input[type="submit"] {
+  padding: 5px;
+  font-size: 20px;
 }
 
 #customers td, #customers th {

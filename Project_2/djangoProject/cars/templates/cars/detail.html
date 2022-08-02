@@ -7,27 +7,45 @@
     <link rel="icon" type="image/svg" href="https://upload.wikimedia.org/wikipedia/commons/c/c3/Python-logo-notext.svg">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'cars/style.css' %}">
 </head>
 <body>
-<div class="container d-grid col-5 mx-auto">
-    <br>
-    <h1 class="text-center">Car Details</h1>
-    <br>
-    <label><strong>VIN: </strong>{{ car.vin }}</label><br>
-    <label><strong>Maker: </strong>{{ car.make }}</label><br>
-    <label><strong>Model: </strong>{{ car.model }}</label><br>
-
+<h1 class="detail_title text-center">Car Details</h1>
+<div class="container d-grid col-9">
     <form action="{% url 'cars:more' car.id %}" method="get">
-        {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
-        {% for name_detail, detail in car_detail.items %}
-            {% if detail %}
-                <label>{{ name_detail }}: {{ detail }}</label><br>
-            {% endif %}
-        {% endfor %}
-        <input type="submit" value="Fetch more details" class="container d-grid"><br>
+        <div class="car_details d-grid">
+            <table id="customers">
+                    <tr>
+                        <th style="font-weight:bold">Detail</th>
+                        <th style="font-weight:bold">Value</th>
+                    </tr>
+                    <tr>
+                        <th>VIN: </th>
+                        <th>{{ car.vin }}</th>
+                    </tr>
+                    <tr>
+                        <th>Maker: </th>
+                        <th>{{ car.make }}</th>
+                    </tr>
+                    <tr>
+                        <th>Model: </th>
+                        <th>{{ car.model }}</th>
+                    </tr>
+                {% for name_detail, detail in car_detail.items %}
+                    {% if detail %}
+                        <tr>
+                            <th>{{ name_detail }}</th>
+                            <th>{{ detail }}</th>
+                        </tr>
+                    {% endif %}
+                {% endfor %}
+            </table>
+        </div>
+    <div class="text-center" style="padding: 7px">
+        <input type="submit" value="Fetch more details" class="container d-grid">
+    </div>
     </form>
-
 </div>
-<br>
 </body>
 </html>
