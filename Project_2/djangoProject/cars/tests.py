@@ -112,14 +112,12 @@ class MoreDetailsViewTests(TestCase):
 
     def test_more_details_errors(self):
         """
-        The page should show a message error.
+        The page should return error code 404.
         """
         Car.objects.all().delete()
-        # car1 = Car.objects.create(vin='4T1KZ1AK5MU050696')
-        # url = reverse('cars:more', args=(car1.id,))
-        # response = self.client.get(url)
-        # self.assertContains(response, car1.vin)
-        # self.assertContains(response, "Something went wrong.")
+        url = reverse('cars:more', args=(1,))
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 404)
 
 
 # Create your tests here.
