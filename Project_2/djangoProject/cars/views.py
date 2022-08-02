@@ -1,3 +1,4 @@
+from django.http import HttpResponse, Http404
 from django.shortcuts import render, get_object_or_404
 from django.views import generic
 from cars.models import Car
@@ -17,7 +18,12 @@ class IndexView(generic.ListView):
         """
         Return a list with cars.
         """
-        return Car.objects.all()
+        query = self.request.GET.get("vin")
+        if query:
+            vin_list = Car.objects.filter(vin=query.upper())
+        else:
+            vin_list = Car.objects.all()
+        return vin_list
 
 
 class DetailView(generic.DetailView):
@@ -33,12 +39,8 @@ def more_details(request, pk):
     try:
         car = car_queryset.first()
         car_detail = car_queryset.values(*detail_list)[0]
-    except (KeyError, Car.DoesNotExist, IndexError):
-        car = get_object_or_404(Car, pk=pk)
-        return render(request, 'cars/detail.html', {
-            'car': car,
-            'error_message': "Something went wrong."
-        })
+    except (Car.DoesNotExist, IndexError):
+        raise Http404("Car does not exist!")
     else:
         return render(request, 'cars/detail.html', {
             'car': car,
