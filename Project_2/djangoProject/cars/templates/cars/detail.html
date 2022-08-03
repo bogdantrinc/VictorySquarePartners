@@ -15,6 +15,11 @@
 <div class="container d-grid col-9">
     <form action="{% url 'cars:more' car.id %}" method="get">
         <div class="car_details d-grid">
+            {% if car.image_url %}
+                <div class="text-center"><img src="{{ car.image_url }}" alt="No car available." class="car_image"></div>
+            {% else %}
+                <div class="text-center"><img src="{% static 'cars/images/no_car.svg' %}" alt="No car available." class="car_image"></div>
+            {% endif %}
             <table id="customers">
                     <tr>
                         <th style="font-weight:bold">Detail</th>

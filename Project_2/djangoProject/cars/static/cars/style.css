@@ -27,6 +27,13 @@ div.car_details {
   max-height: 600px;
 }
 
+.car_image {
+  max-width: 100%;
+  height: auto;
+  padding-bottom: 10px;
+  border-radius: 10px 10px;
+}
+
 input[type="text"] {
   width: 80%;
   padding: 7px;
