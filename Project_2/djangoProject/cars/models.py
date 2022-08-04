@@ -11,6 +11,7 @@ class Car(models.Model):
                                        RegexValidator(r'^[A-Z0-9]*$',
                                                       'The car VIN has only numbers and capital letters!')])
     date_added = models.DateTimeField('date added', auto_now_add=True)
+    described = models.BooleanField(default=False)
     title = models.CharField(max_length=100, default='')
     description = models.TextField(max_length=500, default='')
     year = models.PositiveSmallIntegerField(validators=[MaxValueValidator(timezone.now().year),
