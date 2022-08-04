@@ -1,0 +1,55 @@
+body {
+  background-color: #181818;
+}
+
+h1.page_title, h1.detail_title {
+  background-color: white;
+  padding: 4px;
+}
+
+div.container {
+  background-color: white;
+  padding: 13px;
+  border-radius: 8px;
+}
+
+div.car_list {
+  padding: 25px;
+  overflow: auto;
+  height: auto;
+  max-height: 600px;
+}
+
+div.car_details {
+  padding: 25px;
+  overflow: auto;
+  height: auto;
+  max-height: 600px;
+}
+
+.car_image {
+  max-width: 100%;
+  height: auto;
+  padding-bottom: 10px;
+  border-radius: 10px 10px;
+}
+
+input[type="text"] {
+  width: 80%;
+  padding: 7px;
+}
+
+input[type="submit"] {
+  padding: 5px;
+  font-size: 20px;
+}
+
+#customers td, #customers th {
+  border: 1px solid #ddd;
+  font-weight:normal;
+  padding: 8px;
+}
+
+#customers tr:nth-child(even){background-color: #f2f2f2;}
+
+#customers tr:hover {background-color: #ddd;}
