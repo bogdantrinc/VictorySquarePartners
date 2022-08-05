@@ -28,6 +28,6 @@ def api_detail(vin: str):
     return car_data
 
 
-call = api_detail(vin='1GNSCNKD8MR429859')
+call = api_detail(vin='1GNSKPKD3MR214906')
 
 print(call)
