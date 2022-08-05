@@ -13,6 +13,7 @@ class Car(models.Model):
     date_added = models.DateTimeField('date added', auto_now_add=True)
     described = models.BooleanField(default=False)
     title = models.CharField(max_length=100, default='')
+    short_title = models.CharField(max_length=100, default='')
     description = models.TextField(max_length=500, default='')
     year = models.PositiveSmallIntegerField(validators=[MaxValueValidator(timezone.now().year),
                                                         MinValueValidator(1900)],
@@ -54,7 +55,7 @@ class Car(models.Model):
 
 
 class CarAdmin(admin.ModelAdmin):
-    list_display = ('vin', 'make', 'model', 'date_added')
+    list_display = ('vin', 'make', 'model', 'date_added', 'described')
     list_filter = ['date_added', 'make', 'model']
     search_fields = ['vin', 'make', 'model']
     fieldsets = [
