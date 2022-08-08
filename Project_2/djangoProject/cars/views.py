@@ -7,22 +7,12 @@ from cars.models import Car
 from cars.files.cars.api_detail import api_detail
 
 
-get_detail_list = ['make', 'model', 'title', 'short_title', 'description', 'year', 'trim', 'mileage', 'mileage_unit',
-                   'transmission_type', 'fuel_type', 'body_style', 'drivetrain', 'interior_color', 'exterior_color',
-                   'doors', 'cylinders', 'displacement', 'msrp', 'state_of_vehicle', 'grouped_exterior_color',
-                   'grouped_interior_color', 'engine', 'fuel_economy_city', 'fuel_economy_city_unit',
-                   'fuel_economy_highway', 'fuel_economy_highway_unit', 'availability', 'image_url', 'normalized_make',
-                   'grouped_body_style', 'grouped_transmission_type', 'sale_price', 'url', 'stock_number']
-
-
 detail_list = ['title', 'description', 'year', 'trim', 'mileage', 'mileage_unit', 'transmission_type', 'fuel_type',
                'body_style', 'drivetrain', 'interior_color', 'exterior_color', 'doors', 'cylinders', 'displacement',
                'msrp', 'state_of_vehicle', 'grouped_exterior_color', 'grouped_interior_color', 'engine',
                'fuel_economy_city', 'fuel_economy_city_unit', 'fuel_economy_highway', 'fuel_economy_highway_unit',
                'availability', 'image_url', 'normalized_make', 'grouped_body_style', 'grouped_transmission_type',
                'sale_price', 'url', 'stock_number']
-
-
 
 
 class IndexView(generic.ListView):
@@ -56,13 +46,7 @@ def more_details(request, pk):
         if not car.described:
             get_api_data = api_detail(car.vin)
             api_data = {key: value for key, value in get_api_data.items() if value is not None}
-            ###################################################################################
-            get_car_detail = car_queryset.values(*get_detail_list)[0]
-            for detail_name in get_car_detail:
-                if detail_name in api_data:
-                    setattr(car, detail_name, api_data[detail_name])
-            ###################################################################################
-            # obj, created = Car.objects.update_or_create(pk=pk, defaults=api_data)
+            obj, created = Car.objects.update_or_create(pk=pk, defaults=api_data)
             car.described = True
             car.save()
         car_detail = car_queryset.values(*detail_list)[0]
