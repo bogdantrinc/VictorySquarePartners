@@ -49,7 +49,7 @@ def more_details(request, pk):
             obj, created = Car.objects.update_or_create(pk=pk, defaults=api_data)
             car.described = True
             car.save()
-        car_detail = car_queryset.values(*detail_list)[0]
+        car_detail = Car.objects.filter(pk=pk).values(*detail_list)[0]
 
     except JSONDecodeError:
         messages.error(request, "Couldn't fetch more data from the server.")
