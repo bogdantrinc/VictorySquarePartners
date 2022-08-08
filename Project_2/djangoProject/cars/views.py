@@ -43,14 +43,13 @@ def more_details(request, pk):
     car_queryset = Car.objects.filter(pk=pk)
     try:
         car = car_queryset.first()
-        car.described = False
         if not car.described:
             get_api_data = api_detail(car.vin)
             api_data = {key: value for key, value in get_api_data.items() if value is not None}
             obj, created = Car.objects.update_or_create(pk=pk, defaults=api_data)
             car.described = True
             car.save()
-        car_detail = Car.objects.filter(pk=obj.id).values(*detail_list)[0]
+        car_detail = Car.objects.filter(pk=pk).values(*detail_list)[0]
 
     except JSONDecodeError:
         messages.error(request, "Couldn't fetch more data from the server.")
