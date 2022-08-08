@@ -31,7 +31,7 @@ class Car(models.Model):
     exterior_color = models.CharField(max_length=100, default='')
     doors = models.PositiveSmallIntegerField(null=True)
     cylinders = models.PositiveSmallIntegerField(null=True)
-    displacement = models.CharField(max_length=100, default='')
+    displacement = models.DecimalField(max_digits=4, decimal_places=2, null=True)
     msrp = models.FloatField(validators=[MinValueValidator(0)], null=True)
     state_of_vehicle = models.CharField(max_length=100, default='')
     grouped_exterior_color = models.CharField(max_length=100, default='')
@@ -62,5 +62,3 @@ class CarAdmin(admin.ModelAdmin):
         (None, {'fields': ['vin']}),
         ('Car Information', {'fields': ['make', 'model']}),
     ]
-
-# Create your models here.

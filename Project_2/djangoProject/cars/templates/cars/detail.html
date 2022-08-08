@@ -21,6 +21,7 @@
                     <div class="text-center"><img src="{% static 'cars/images/no_car.svg' %}" alt="No car available." class="car_image"></div>
                 {% endif %}
                 <label class="text-center" style="padding: 20px; font-size: 25px"><strong>{{ car.short_title }}</strong></label>
+                {% include 'cars/includes/messages.html' %}
                 <table id="customers">
                         <tr>
                             <th style="font-weight:bold">Detail</th>
