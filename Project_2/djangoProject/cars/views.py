@@ -46,10 +46,16 @@ def more_details(request, pk):
         if not car.described:
             get_api_data = api_detail(car.vin)
             api_data = {key: value for key, value in get_api_data.items() if value is not None}
-            obj, created = Car.objects.update_or_create(pk=pk, defaults=api_data)
+            ######################################################################
+            get_car_detail = Car.objects.filter(pk=pk).values()[0]
+            for detail_name in get_car_detail:
+                if detail_name in api_data:
+                    setattr(car, detail_name, api_data[detail_name])
+            ######################################################################
+            # obj, created = Car.objects.update_or_create(pk=pk, defaults=api_data)
             car.described = True
             car.save()
-        car_detail = Car.objects.filter(pk=pk).values(*detail_list)[0]
+        car_detail = car_queryset.values(*detail_list)[0]
 
     except JSONDecodeError:
         messages.error(request, "Couldn't fetch more data from the server.")
