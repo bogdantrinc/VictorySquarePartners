@@ -1,7 +1,12 @@
+from django.contrib import messages
 from django.http import Http404
 from django.shortcuts import render
 from django.views import generic
+from requests.exceptions import JSONDecodeError
 from cars.models import Car
+from cars.files.cars.api_detail import api_detail
+
+
 detail_list = ['title', 'description', 'year', 'trim', 'mileage', 'mileage_unit', 'transmission_type', 'fuel_type',
                'body_style', 'drivetrain', 'interior_color', 'exterior_color', 'doors', 'cylinders', 'displacement',
                'msrp', 'state_of_vehicle', 'grouped_exterior_color', 'grouped_interior_color', 'engine',
@@ -38,14 +43,28 @@ def more_details(request, pk):
     car_queryset = Car.objects.filter(pk=pk)
     try:
         car = car_queryset.first()
+        if not car.described:
+            get_api_data = api_detail(car.vin)
+            api_data = {key: value for key, value in get_api_data.items() if value is not None}
+            get_car_detail = Car.objects.filter(pk=pk).values()[0]
+            for detail_name in get_car_detail:
+                if detail_name in api_data:
+                    setattr(car, detail_name, api_data[detail_name])
+            car.described = True
+            car.save()
         car_detail = car_queryset.values(*detail_list)[0]
+
+    except JSONDecodeError:
+        messages.error(request, "Couldn't fetch more data from the server.")
+        return render(request, 'cars/detail.html', {
+            'car': car,
+        })
+
     except (Car.DoesNotExist, IndexError):
         raise Http404("Car does not exist!")
+
     else:
         return render(request, 'cars/detail.html', {
             'car': car,
             'car_detail': car_detail
         })
-
-
-# Create your views here.

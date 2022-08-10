@@ -13,6 +13,7 @@ class Car(models.Model):
     date_added = models.DateTimeField('date added', auto_now_add=True)
     described = models.BooleanField(default=False)
     title = models.CharField(max_length=100, default='')
+    short_title = models.CharField(max_length=100, default='')
     description = models.TextField(max_length=500, default='')
     year = models.PositiveSmallIntegerField(validators=[MaxValueValidator(timezone.now().year),
                                                         MinValueValidator(1900)],
@@ -30,7 +31,7 @@ class Car(models.Model):
     exterior_color = models.CharField(max_length=100, default='')
     doors = models.PositiveSmallIntegerField(null=True)
     cylinders = models.PositiveSmallIntegerField(null=True)
-    displacement = models.CharField(max_length=100, default='')
+    displacement = models.DecimalField(max_digits=4, decimal_places=2, null=True)
     msrp = models.FloatField(validators=[MinValueValidator(0)], null=True)
     state_of_vehicle = models.CharField(max_length=100, default='')
     grouped_exterior_color = models.CharField(max_length=100, default='')
@@ -54,12 +55,10 @@ class Car(models.Model):
 
 
 class CarAdmin(admin.ModelAdmin):
-    list_display = ('vin', 'make', 'model', 'date_added')
+    list_display = ('vin', 'make', 'model', 'date_added', 'described')
     list_filter = ['date_added', 'make', 'model']
     search_fields = ['vin', 'make', 'model']
     fieldsets = [
         (None, {'fields': ['vin']}),
         ('Car Information', {'fields': ['make', 'model']}),
     ]
-
-# Create your models here.
