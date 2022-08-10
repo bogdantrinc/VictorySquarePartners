@@ -15,8 +15,12 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from cars import views
 
 urlpatterns = [
     path('cars/', include('cars.urls')),
     path('admin/', admin.site.urls),
+    path('register', views.register_request, name="register"),
+    # This is just a temporary implementation until a create a login endpoint
+    path('login', views.IndexView.as_view(), name='login')
 ]
