@@ -4,7 +4,7 @@ from django.shortcuts import render, redirect
 from django.views import generic
 from requests.exceptions import JSONDecodeError
 from cars.models import Car
-from .forms import RegisterUser
+from cars.forms import RegisterUser
 from django.contrib.auth import login
 from cars.files.cars.api_detail import api_detail
 
