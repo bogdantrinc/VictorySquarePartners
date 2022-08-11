@@ -1,9 +1,11 @@
 from django.contrib import messages
 from django.http import Http404
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.views import generic
 from requests.exceptions import JSONDecodeError
 from cars.models import Car
+from cars.forms import RegisterUser
+from django.contrib.auth import login
 from cars.files.cars.api_detail import api_detail
 
 
@@ -68,3 +70,15 @@ def more_details(request, pk):
             'car': car,
             'car_detail': car_detail
         })
+
+def register_request(request):
+	if request.method == "POST":
+		form = RegisterUser(request.POST)
+		if form.is_valid():
+			user = form.save()
+			login(request, user)
+			messages.success(request, "Registration successful." )
+			return redirect("cars:index")
+		messages.error(request, "Unsuccessful registration. Invalid information.")
+	form = RegisterUser()
+	return render(request=request, template_name="cars/register.html", context={"register_form":form})
