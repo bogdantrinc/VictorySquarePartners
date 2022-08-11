@@ -2,9 +2,10 @@ body {
   background-color: #181818;
 }
 
-h1.page_title {
+div.page_title {
   background-color: white;
-  padding: 4px;
+  padding: 0.5px;
+  margin-bottom: 8px;
 }
 
 div.container {
@@ -24,6 +25,26 @@ div.page_list {
   overflow: auto;
   height: auto;
   max-height: 600px;
+}
+
+button.logout {
+  position: absolute;
+  top: 1.3%;
+  right: 1%;
+  font-size: 2vmin;
+}
+
+div.welcome {
+  position: absolute;
+  top: 1.3%;
+  left: 1%;
+  font-size: 3vmin;
+}
+
+div.messages {
+  position: absolute;
+  top: 1.3%;
+  left: 0.7%;
 }
 
 .car_image {

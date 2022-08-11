@@ -20,7 +20,7 @@ from cars import views
 urlpatterns = [
     path('cars/', include('cars.urls')),
     path('admin/', admin.site.urls),
-    path('register', views.register_request, name="register"),
-    # This is just a temporary implementation until I create a login endpoint
-    path('login', views.IndexView.as_view(), name='login')
+    path('register/', views.register_request, name='register'),
+    path('login/', views.login_request, name='login'),
+    path('logout/', views.logout_request, name= 'logout'),
 ]

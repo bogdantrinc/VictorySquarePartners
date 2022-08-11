@@ -11,7 +11,15 @@
     <title>Car List</title>
 </head>
 <body>
-<h1 class="page_title text-center">Car list</h1>
+<div class="page_title text-center page_form">
+    <div class="welcome">Welcome, <a href="#">{{user.username}}</a></div>
+    <h1>Car list</h1>
+    <form action="{% url 'logout' %}" method="get">
+        <button class="btn btn-primary logout" type="submit">
+            Logout
+        </button>
+    </form>
+</div>
 <div class="container d-grid col-9">
     {% include 'cars/includes/messages.html' %}
     <form action="{% url 'cars:index' %}" method="get">

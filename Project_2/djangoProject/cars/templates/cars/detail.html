@@ -11,7 +11,15 @@
     <title>Car Details | {{ car.vin }}</title>
 </head>
 <body>
-<h1 class="page_title text-center">Car Details</h1>
+    <div class="page_title text-center page_form">
+        <div class="welcome">Welcome, <a href="#">{{user.username}}</a></div>
+        <h1>Car Details</h1>
+        <form action="{% url 'logout' %}" method="get">
+            <button class="btn btn-primary logout" type="submit">
+                Logout
+            </button>
+        </form>
+    </div>
     <form action="{% url 'cars:more' car.id %}" method="get">
         <div class="container d-grid col-9">
             <div class="page_list d-grid">

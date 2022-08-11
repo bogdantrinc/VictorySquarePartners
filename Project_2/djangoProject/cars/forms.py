@@ -14,7 +14,6 @@ class RegisterUser(UserCreationForm):
 		widget=(forms.TextInput(
 			attrs={'class': 'form-control', 'placeholder': 'Doe'})))
 	address = forms.CharField(
-		max_length=12, min_length=4,
 		widget=(forms.TextInput(
 			attrs={'class': 'form-control'})))
 	email = forms.EmailField(

@@ -8,23 +8,23 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" href="{% static 'cars/style.css' %}">
-    <title>Car Registration</title>
+    <title>Car Login</title>
 </head>
 <body>
     {% load crispy_forms_tags %}
-        <div class="page_title text-center page_form">
+    <div class="page_title text-center page_form">
         <div class="messages">{% include 'cars/includes/messages.html' %}</div>
-        <h1>Register</h1>
+        <h1>Login</h1>
     </div>
     <div class="container">
-	    <div class="page_form py-3">
+	    <div class="page_form py-5" style="margin-top: 14%; margin-bottom: 12%">
             <form method="POST">
 		        {% csrf_token %}
-		        {{ register_form|crispy }}
-		        <button class="btn btn-primary container" type="submit" style="font-size: 25px">Register</button>
+		        {{ login_form|crispy }}
+		        <button class="btn btn-primary container" type="submit" style="font-size: 25px">Login</button>
 	        </form>
         </div>
-	    <p class="text-center">If you already have an account, <a href="/login">login</a> instead.</p>
+	    <p class="text-center">Don't have an account? <a href="/register">Create an account</a>.</p>
     </div>
 </body>
 </html>
