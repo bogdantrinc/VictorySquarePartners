@@ -6,11 +6,11 @@ from django.contrib.auth.models import User
 
 class RegisterUser(UserCreationForm):
 	first_name = forms.CharField(
-		max_length=12, min_length=4, required=True,
+		max_length=12, min_length=2, required=True,
 		widget=forms.TextInput(
 			attrs={'class': 'form-control', 'placeholder': 'John'}))
 	last_name = forms.CharField(
-		max_length=12, min_length=4, required=True,
+		max_length=12, min_length=2, required=True,
 		widget=(forms.TextInput(
 			attrs={'class': 'form-control', 'placeholder': 'Doe'})))
 	address = forms.CharField(

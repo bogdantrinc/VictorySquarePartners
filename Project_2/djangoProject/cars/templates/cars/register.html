@@ -1,21 +1,13 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    {% load static %}
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="icon" type="image/svg" href="{% static 'cars/images/car_logo.svg' %}">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
-          integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
-    <link rel="stylesheet" type="text/css" href="{% static 'cars/style.css' %}">
-    <title>Car Registration</title>
-</head>
-<body>
-    {% load crispy_forms_tags %}
-        <div class="page_title text-center page_form">
+{% extends "cars/header.html" %}
+{% block title %}Car Registration{% endblock %}
+{% block user %}
+    <div class="page_title text-center page_form">
         <div class="messages">{% include 'cars/includes/messages.html' %}</div>
         <h1>Register</h1>
     </div>
+{% endblock %}
+{% block content %}
+    {% load crispy_forms_tags %}
     <div class="container">
 	    <div class="page_form py-3">
             <form method="POST">
@@ -26,5 +18,4 @@
         </div>
 	    <p class="text-center">If you already have an account, <a href="/login">login</a> instead.</p>
     </div>
-</body>
-</html>
+{% endblock %}

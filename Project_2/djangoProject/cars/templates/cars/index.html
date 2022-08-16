@@ -1,25 +1,7 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    {% load static %}
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="icon" type="image/svg" href="{% static 'cars/images/car_logo.svg' %}">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
-          integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
-    <link rel="stylesheet" type="text/css" href="{% static 'cars/style.css' %}">
-    <title>Car List</title>
-</head>
-<body>
-<div class="page_title text-center page_form">
-    <div class="welcome">Welcome, <a href="#">{{user.username}}</a></div>
-    <h1>Car list</h1>
-    <form action="{% url 'logout' %}" method="get">
-        <button class="btn btn-primary logout" type="submit">
-            Logout
-        </button>
-    </form>
-</div>
+{% extends "cars/header.html" %}
+{% block title %}Car List{% endblock %}
+{% block page_title %}Car List{% endblock %}
+{% block content %}
 <div class="container d-grid col-9">
     {% include 'cars/includes/messages.html' %}
     <form action="{% url 'cars:index' %}" method="get">
@@ -48,5 +30,4 @@
         {% endif %}
     </div>
 </div>
-</body>
-</html>
+{% endblock %}

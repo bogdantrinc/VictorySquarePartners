@@ -1,25 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    {% load static %}
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="icon" type="image/svg" href="{% static 'cars/images/car_logo.svg' %}">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
-          integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
-    <link rel="stylesheet" type="text/css" href="{% static 'cars/style.css' %}">
-    <title>Car Details | {{ car.vin }}</title>
-</head>
-<body>
-    <div class="page_title text-center page_form">
-        <div class="welcome">Welcome, <a href="#">{{user.username}}</a></div>
-        <h1>Car Details</h1>
-        <form action="{% url 'logout' %}" method="get">
-            <button class="btn btn-primary logout" type="submit">
-                Logout
-            </button>
-        </form>
-    </div>
+{% extends "cars/header.html" %}
+{% load static %}
+{% block title %}Car Details | {{ car.vin }}{% endblock %}
+{% block page_title %}Car Details{% endblock %}
+{% block content %}
     <form action="{% url 'cars:more' car.id %}" method="get">
         <div class="container d-grid col-9">
             <div class="page_list d-grid">
@@ -62,5 +45,4 @@
             </div>
         </div>
     </form>
-</body>
-</html>
+{% endblock %}
