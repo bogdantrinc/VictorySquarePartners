@@ -1,7 +1,7 @@
 from django import forms
 from django.core.exceptions import ValidationError
-from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth.models import User
+from django.contrib.auth.forms import UserCreationForm, UserChangeForm
+from cars.models import User
 
 
 class RegisterUser(UserCreationForm):
@@ -45,5 +45,27 @@ class RegisterUser(UserCreationForm):
 		super(RegisterUser, self).clean()
 		email = self.cleaned_data.get('email')
 		if User.objects.filter(email=email).exists():
-			raise ValidationError("Email exists!")
+			raise ValidationError("Email already exists!")
 		return self.cleaned_data
+
+class EditUser(UserChangeForm):
+	first_name = forms.CharField(
+		max_length=12, min_length=2, required=True,
+		widget=forms.TextInput(
+			attrs={'class': 'form-control'}))
+	last_name = forms.CharField(
+		max_length=12, min_length=2, required=True,
+		widget=(forms.TextInput(
+			attrs={'class': 'form-control'})))
+	address = forms.CharField(
+		widget=(forms.TextInput(
+			attrs={'class': 'form-control'})))
+	email = forms.EmailField(
+		max_length=50,
+		help_text='You cannot change your email.',
+		widget=(forms.TextInput(
+			attrs={'class': 'form-control', 'readonly': 'readonly'})))
+
+	class Meta:
+		model = User
+		fields = ('username', 'first_name', 'last_name', 'address', 'email')

@@ -1,12 +1,14 @@
 from django.contrib import messages
 from django.contrib.auth import login, authenticate, logout
-from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth.forms import AuthenticationForm, PasswordChangeForm
+from django.contrib.auth.views import PasswordChangeView
+from django.urls import reverse_lazy
 from django.http import Http404
 from django.shortcuts import render, redirect
 from django.views import generic
 from requests.exceptions import JSONDecodeError
 from cars.models import Car
-from cars.forms import RegisterUser
+from cars.forms import RegisterUser, EditUser
 from cars.files.cars.api_detail import api_detail
 
 
@@ -40,6 +42,29 @@ class DetailView(generic.DetailView):
 
     def get_queryset(self):
         return Car.objects.all()
+
+
+class EditUser(generic.UpdateView):
+    form_class = EditUser
+    template_name = "cars/account/profile.html"
+    success_url = reverse_lazy('cars:index')
+
+    def get_object(self):
+        return self.request.user
+
+    def form_valid(self, form):
+        messages.success(self.request, "You've updated your profile successfully!")
+        return super().form_valid(form)
+
+
+class PasswordChange(PasswordChangeView):
+    form_class = PasswordChangeForm
+    template_name = 'cars/account/password.html'
+    success_url = reverse_lazy('profile')
+
+    def form_valid(self, form):
+        messages.success(self.request, "You've changed your password successfully!")
+        return super().form_valid(form)
 
 
 def more_details(request, pk):
@@ -82,7 +107,7 @@ def register_request(request):
 			return redirect("cars:index")
 		messages.error(request, "Unsuccessful registration. Invalid information.")
 	form = RegisterUser()
-	return render(request=request, template_name="cars/register.html", context={"register_form":form})
+	return render(request=request, template_name="cars/account/register.html", context={"register_form":form})
 
 def login_request(request):
 	if request.method == "POST":
@@ -100,9 +125,9 @@ def login_request(request):
 		else:
 			messages.error(request,"Invalid username or password.")
 	form = AuthenticationForm()
-	return render(request=request, template_name="cars/login.html", context={"login_form":form})
+	return render(request=request, template_name="cars/account/login.html", context={"login_form": form})
 
 def logout_request(request):
 	logout(request)
 	messages.info(request, "You have successfully logged out.")
-	return redirect("login")
+	return redirect("/login/")
