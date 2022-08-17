@@ -13,7 +13,7 @@
 <body>
 {% block user %}
     <div class="page_title text-center page_form">
-        <div class="welcome">Welcome, <a href="{% url 'profile' %}">{{user.username}}</a></div>
+        <div class="welcome">Welcome, <a href="{% url 'profile' %}">{{user.get_short_name}}</a></div>
         <h1>{% block page_title %}{% endblock %}</h1>
         <form action="{% url 'logout' %}" method="get">
             <button class="btn btn-primary logout" type="submit">

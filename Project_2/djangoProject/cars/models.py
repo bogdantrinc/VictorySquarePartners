@@ -1,27 +1,7 @@
 from django.db import models
 from django.contrib import admin
-from django.contrib.auth.models import User
-from django.contrib.auth.admin import UserAdmin
-from cars.forms import RegisterUser, EditUser
 from django.core.validators import MinLengthValidator, RegexValidator, MaxValueValidator, MinValueValidator
 from django.utils import timezone
-
-
-class User(User):
-    address = models.CharField(max_length=100, default='', blank=True)
-
-    def __str__(self):
-        return self.username
-
-
-class UserAdmin(UserAdmin):
-    add_form = RegisterUser
-    form = EditUser
-    model = User
-    list_display = ['username', 'email']
-    fieldsets = [
-        ('Personal info', {'fields': ['first_name', 'last_name', 'address', 'email']}),
-    ]
 
 
 class Car(models.Model):
@@ -72,13 +52,3 @@ class Car(models.Model):
 
     def __str__(self):
         return self.vin
-
-
-class CarAdmin(admin.ModelAdmin):
-    list_display = ('vin', 'make', 'model', 'date_added', 'described')
-    list_filter = ['date_added', 'make', 'model']
-    search_fields = ['vin', 'make', 'model']
-    fieldsets = [
-        (None, {'fields': ['vin']}),
-        ('Car Information', {'fields': ['make', 'model']}),
-    ]

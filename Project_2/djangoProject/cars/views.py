@@ -7,9 +7,9 @@ from django.http import Http404
 from django.shortcuts import render, redirect
 from django.views import generic
 from requests.exceptions import JSONDecodeError
-from cars.models import Car
-from cars.forms import RegisterUser, EditUser
+from accounts.forms import RegisterUser, EditUser
 from cars.files.cars.api_detail import api_detail
+from cars.models import Car
 
 
 detail_list = ['title', 'description', 'year', 'trim', 'mileage', 'mileage_unit', 'transmission_type', 'fuel_type',

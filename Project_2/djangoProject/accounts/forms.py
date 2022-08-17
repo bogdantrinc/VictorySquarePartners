@@ -1,10 +1,14 @@
 from django import forms
 from django.core.exceptions import ValidationError
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
-from cars.models import User
+from accounts.models import User
 
 
 class RegisterUser(UserCreationForm):
+	email = forms.EmailField(
+		max_length=50,
+		widget=(forms.TextInput(
+			attrs={'class': 'form-control', 'placeholder': 'john.doe@email.com'})))
 	first_name = forms.CharField(
 		max_length=12, min_length=2, required=True,
 		widget=forms.TextInput(
@@ -16,10 +20,6 @@ class RegisterUser(UserCreationForm):
 	address = forms.CharField(
 		widget=(forms.TextInput(
 			attrs={'class': 'form-control'})))
-	email = forms.EmailField(
-		max_length=50,
-		widget=(forms.TextInput(
-			attrs={'class': 'form-control', 'placeholder': 'john.doe@email.com'})))
 	password1 = forms.CharField(
 		label='Password',
 		widget=forms.PasswordInput(
@@ -32,23 +32,14 @@ class RegisterUser(UserCreationForm):
 
 	class Meta:
 		model = User
-		fields = ('username', 'first_name', 'last_name', 'address', 'email', 'password1', 'password2')
+		fields = ('email', 'first_name', 'last_name', 'address', 'password1', 'password2')
 
-	def save(self, commit=True):
-		user = super(RegisterUser, self).save(commit=False)
-		user.email = self.cleaned_data['email']
-		if commit:
-			user.save()
-		return user
-
-	def clean(self):
-		super(RegisterUser, self).clean()
-		email = self.cleaned_data.get('email')
-		if User.objects.filter(email=email).exists():
-			raise ValidationError("Email already exists!")
-		return self.cleaned_data
 
 class EditUser(UserChangeForm):
+	email = forms.EmailField(
+		max_length=50,
+		widget=(forms.TextInput(
+			attrs={'class': 'form-control'})))
 	first_name = forms.CharField(
 		max_length=12, min_length=2, required=True,
 		widget=forms.TextInput(
@@ -60,12 +51,8 @@ class EditUser(UserChangeForm):
 	address = forms.CharField(
 		widget=(forms.TextInput(
 			attrs={'class': 'form-control'})))
-	email = forms.EmailField(
-		max_length=50,
-		help_text='You cannot change your email.',
-		widget=(forms.TextInput(
-			attrs={'class': 'form-control', 'readonly': 'readonly'})))
+
 
 	class Meta:
 		model = User
-		fields = ('username', 'first_name', 'last_name', 'address', 'email')
+		fields = ('email', 'first_name', 'last_name', 'address')
