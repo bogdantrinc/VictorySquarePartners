@@ -12,8 +12,8 @@
 
 {% for message in messages %}
 <div class="container-fluid p-0">
-  <div class="alert {{ message.tags }} alert-dismissible fade show" role="alert">
-      <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Danger:">
+  <div class="alert {{ message.tags }} alert-dismissible fade show" role="alert" style="font-size: 2vh; padding: 1.5vh">
+      <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" style="width: 2vh; height: 2vh">
           {% if message.tags == 'alert-success' %}
               <use xlink:href="#check-circle-fill"/>
           {% elif message.tags == 'alert-info' %}
