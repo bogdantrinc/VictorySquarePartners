@@ -27,7 +27,14 @@ div.page_list {
   max-height: 600px;
 }
 
-button.logout {
+button.delete_account{
+  position: absolute;
+  top: -1.9%;
+  right: 0.7%;
+  font-size: 2vmin;
+}
+
+button.logout{
   position: absolute;
   top: 1.3%;
   right: 1%;

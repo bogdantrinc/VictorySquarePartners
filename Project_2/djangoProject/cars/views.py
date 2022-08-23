@@ -1,5 +1,5 @@
 from django.contrib import messages
-from django.contrib.auth import login, authenticate, logout
+from django.contrib.auth import login, authenticate, logout, get_user_model
 from django.contrib.auth.forms import AuthenticationForm, PasswordChangeForm
 from django.contrib.auth.views import PasswordChangeView
 from django.urls import reverse_lazy
@@ -118,7 +118,7 @@ def login_request(request):
 			user = authenticate(username=username, password=password)
 			if user is not None:
 				login(request, user)
-				messages.info(request, f"You are now logged in as {username}.")
+				messages.info(request, f"You are now logged in as {username}")
 				return redirect("cars:index")
 			else:
 				messages.error(request,"Invalid username or password.")
@@ -131,3 +131,11 @@ def logout_request(request):
 	logout(request)
 	messages.info(request, "You have successfully logged out.")
 	return redirect("/login/")
+
+def delete_user_request(request):
+    user = request.user
+    logout(request)
+    User = get_user_model()
+    User.objects.filter(email=user.email).update(is_active=False)
+    messages.success(request, f"You have successfully deleted your account: {user.email}")
+    return redirect("/cars/")

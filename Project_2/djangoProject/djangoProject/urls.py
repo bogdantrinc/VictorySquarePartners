@@ -25,5 +25,6 @@ urlpatterns = [
     path('password/', login_required(views.PasswordChange.as_view(), login_url='/login/'), name='password'),
     path('register/', views.register_request, name='register'),
     path('login/', views.login_request, name='login'),
-    path('logout/', views.logout_request, name= 'logout'),
+    path('logout/', login_required(views.logout_request, login_url='/login/'), name= 'logout'),
+    path('delete/', login_required(views.delete_user_request, login_url='/login/'), name= 'delete'),
 ]
