@@ -3,6 +3,7 @@ from django.contrib.auth import login, authenticate, logout, get_user_model
 from django.contrib.auth.forms import AuthenticationForm, PasswordChangeForm
 from django.contrib.auth.views import PasswordChangeView
 from django.core.paginator import Paginator
+from django.db.models import Q
 from django.urls import reverse_lazy
 from django.http import Http404
 from django.shortcuts import render, redirect
@@ -33,7 +34,7 @@ class IndexView(generic.ListView):
         """
         query = self.request.GET.get("vin")
         if query:
-            vin_list = Car.objects.filter(vin=query.upper())
+            vin_list = Car.objects.filter(Q(vin__contains=query) | Q(make__contains=query) | Q(model__contains=query))
         else:
             vin_list = Car.objects.all()
         return vin_list
