@@ -1,0 +1,24 @@
+{% extends "cars/header.html" %}
+{% block title %}Car Profile{% endblock %}
+{% block user %}
+    <div class="page_title text-center page_form">
+        <div class="messages">{% include 'cars/includes/messages.html' %}</div>
+        <h1><a href="/cars" style="color: black; text-decoration: none;">Profile</a></h1>
+        <form action="{% url 'delete' %}" method="GET">
+            <button class="mt-4 btn btn-danger deleteaccount delete_account" onclick="return confirm('Are you sure you want to delete your account? {{ user.get_username }}')">Delete Account</button>
+        </form>
+    </div>
+{% endblock %}
+{% block content %}
+    {% load crispy_forms_tags %}
+    <div class="container">
+	    <div class="page_form py-3" style="height: 600px">
+            <form method="POST">
+		        {% csrf_token %}
+		        {{ form|crispy }}
+		        <button class="btn btn-primary container" type="submit" style="font-size: 25px">Update</button>
+	        </form>
+        </div>
+	    <p class="text-center">If you've changed your mind, go to the <a href="/cars">home page</a>.</p>
+    </div>
+{% endblock %}

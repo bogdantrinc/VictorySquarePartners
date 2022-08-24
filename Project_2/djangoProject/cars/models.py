@@ -52,13 +52,3 @@ class Car(models.Model):
 
     def __str__(self):
         return self.vin
-
-
-class CarAdmin(admin.ModelAdmin):
-    list_display = ('vin', 'make', 'model', 'date_added', 'described')
-    list_filter = ['date_added', 'make', 'model']
-    search_fields = ['vin', 'make', 'model']
-    fieldsets = [
-        (None, {'fields': ['vin']}),
-        ('Car Information', {'fields': ['make', 'model']}),
-    ]

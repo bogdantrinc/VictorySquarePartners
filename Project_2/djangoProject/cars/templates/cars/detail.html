@@ -1,7 +1,7 @@
 {% extends "cars/header.html" %}
 {% load static %}
 {% block title %}Car Details | {{ car.vin }}{% endblock %}
-{% block page_title %}Car Details{% endblock %}
+{% block page_title %}<a href="/cars" style="color: black; text-decoration: none;">Car Details</a>{% endblock %}
 {% block content %}
     <form action="{% url 'cars:more' car.id %}" method="get">
         <div class="container d-grid col-9">

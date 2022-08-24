@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'cars.apps.CarsConfig',
     'crispy_forms',
+    'accounts.apps.AccountsConfig',
 ]
 
 MIDDLEWARE = [
@@ -134,3 +135,5 @@ API_URL_AUTH = os.getenv('API_URL_AUTH')
 API_URL_DESCRIBE = os.getenv('API_URL_DESCRIBE')
 API_ACCOUNT_EMAIL = os.getenv('API_ACCOUNT_EMAIL')
 API_ACCOUNT_PASSWORD = os.getenv('API_ACCOUNT_PASSWORD')
+
+AUTH_USER_MODEL = 'accounts.User'
