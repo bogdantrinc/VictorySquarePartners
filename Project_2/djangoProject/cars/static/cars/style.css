@@ -14,7 +14,7 @@ div.container {
   border-radius: 8px;
 }
 
-div.page_form {
+div.page_form, div.list_pagination {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -24,7 +24,7 @@ div.page_list {
   padding: 25px;
   overflow: auto;
   height: auto;
-  max-height: 600px;
+  max-height: 570px;
 }
 
 button.delete_account{
