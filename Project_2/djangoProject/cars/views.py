@@ -2,6 +2,7 @@ from django.contrib import messages
 from django.contrib.auth import login, authenticate, logout, get_user_model
 from django.contrib.auth.forms import AuthenticationForm, PasswordChangeForm
 from django.contrib.auth.views import PasswordChangeView
+from django.core.paginator import Paginator
 from django.urls import reverse_lazy
 from django.http import Http404
 from django.shortcuts import render, redirect
@@ -23,6 +24,8 @@ detail_list = ['title', 'description', 'year', 'trim', 'mileage', 'mileage_unit'
 class IndexView(generic.ListView):
     template_name = 'cars/index.html'
     context_object_name = 'car_list'
+    paginate_by = 50
+    model = Car
 
     def get_queryset(self):
         """
