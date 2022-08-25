@@ -4,6 +4,7 @@ from django.contrib.auth.forms import AuthenticationForm, PasswordChangeForm
 from django.contrib.auth.views import PasswordChangeView, PasswordResetView, PasswordResetConfirmView
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.messages.views import SuccessMessageMixin
 from django.core.paginator import Paginator
 from django.db.models import Q
 from django.urls import reverse_lazy
@@ -81,28 +82,25 @@ class PasswordChange(LoginRequiredMixin, PasswordChangeView):
         return super().form_valid(form)
 
 
-class PasswordReset(PasswordResetView):
+class PasswordReset(SuccessMessageMixin, PasswordResetView):
     template_name = 'cars/account/password-reset/password-reset.html'
     email_template_name = 'cars/account/password-reset/password_reset_email.html'
     subject_template_name = 'cars/account/password-reset/password_reset_subject.txt'
     success_url = reverse_lazy('login')
-
-    def form_valid(self, form):
-        messages.success(self.request, "We've sent you an email with the reset password details!")
-        return super().form_valid(form)
+    success_message = "We've sent you an email with the reset password details!"
 
 
 class PasswordResetConfirm(PasswordResetConfirmView):
-    template_name = 'cars/account/password-reset/password_reset_confirm.html',
-    success_url = reverse_lazy('cars:index'),
+    template_name = 'cars/account/password-reset/password_reset_confirm.html'
+    success_url = reverse_lazy('cars:index')
     post_reset_login = True
 
     # def dispatch(self, *args, **kwargs):
     #     dispatch = super().dispatch(*args, **kwargs)
-    #     if self.validlink:
-    #         return dispatch
-    #     messages.error(self.request, "This password reset link has already been used.")
-    #     return redirect('password_reset')
+    #     if not self.validlink:
+    #         messages.error(self.request, "This password reset link has already been used.")
+    #         return redirect('password_reset')
+    #     return dispatch
 
 
 @login_required(login_url='login', redirect_field_name=None)
