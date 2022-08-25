@@ -1,7 +1,9 @@
 from django.contrib import messages
 from django.contrib.auth import login, authenticate, logout, get_user_model
 from django.contrib.auth.forms import AuthenticationForm, PasswordChangeForm
-from django.contrib.auth.views import PasswordChangeView
+from django.contrib.auth.views import PasswordChangeView, PasswordResetView, PasswordResetConfirmView
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.paginator import Paginator
 from django.db.models import Q
 from django.urls import reverse_lazy
@@ -22,7 +24,9 @@ detail_list = ['title', 'description', 'year', 'trim', 'mileage', 'mileage_unit'
                'sale_price', 'url', 'stock_number']
 
 
-class IndexView(generic.ListView):
+class IndexView(LoginRequiredMixin, generic.ListView):
+    login_url = 'login'
+    redirect_field_name = None
     template_name = 'cars/index.html'
     context_object_name = 'car_list'
     paginate_by = 50
@@ -40,7 +44,9 @@ class IndexView(generic.ListView):
         return vin_list
 
 
-class DetailView(generic.DetailView):
+class DetailView(LoginRequiredMixin, generic.DetailView):
+    login_url = 'login'
+    redirect_field_name = None
     model = Car
     template_name = 'cars/detail.html'
 
@@ -48,7 +54,9 @@ class DetailView(generic.DetailView):
         return Car.objects.all()
 
 
-class EditUser(generic.UpdateView):
+class EditUser(LoginRequiredMixin, generic.UpdateView):
+    login_url = 'login'
+    redirect_field_name = None
     form_class = EditUser
     template_name = "cars/account/profile.html"
     success_url = reverse_lazy('cars:index')
@@ -61,7 +69,9 @@ class EditUser(generic.UpdateView):
         return super().form_valid(form)
 
 
-class PasswordChange(PasswordChangeView):
+class PasswordChange(LoginRequiredMixin, PasswordChangeView):
+    login_url = 'login'
+    redirect_field_name = None
     form_class = PasswordChangeForm
     template_name = 'cars/account/password.html'
     success_url = reverse_lazy('profile')
@@ -71,6 +81,31 @@ class PasswordChange(PasswordChangeView):
         return super().form_valid(form)
 
 
+class PasswordReset(PasswordResetView):
+    template_name = 'cars/account/password-reset/password-reset.html'
+    email_template_name = 'cars/account/password-reset/password_reset_email.html'
+    subject_template_name = 'cars/account/password-reset/password_reset_subject.txt'
+    success_url = reverse_lazy('login')
+
+    def form_valid(self, form):
+        messages.success(self.request, "We've sent you an email with the reset password details!")
+        return super().form_valid(form)
+
+
+class PasswordResetConfirm(PasswordResetConfirmView):
+    template_name = 'cars/account/password-reset/password_reset_confirm.html',
+    success_url = reverse_lazy('cars:index'),
+    post_reset_login = True
+
+    # def dispatch(self, *args, **kwargs):
+    #     dispatch = super().dispatch(*args, **kwargs)
+    #     if self.validlink:
+    #         return dispatch
+    #     messages.error(self.request, "This password reset link has already been used.")
+    #     return redirect('password_reset')
+
+
+@login_required(login_url='login', redirect_field_name=None)
 def more_details(request, pk):
     car_queryset = Car.objects.filter(pk=pk)
     try:
@@ -131,15 +166,17 @@ def login_request(request):
 	form = AuthenticationForm()
 	return render(request=request, template_name="cars/account/login.html", context={"login_form": form})
 
+@login_required(login_url='login', redirect_field_name=None)
 def logout_request(request):
 	logout(request)
 	messages.info(request, "You have successfully logged out.")
-	return redirect("/login/")
+	return redirect("login")
 
+@login_required(login_url='login', redirect_field_name=None)
 def delete_user_request(request):
     user = request.user
     logout(request)
     User = get_user_model()
     User.objects.filter(email=user.email).update(is_active=False)
     messages.success(request, f"You have successfully deleted your account: {user.email}")
-    return redirect("/cars/")
+    return redirect("cars")
