@@ -118,6 +118,3 @@ class MoreDetailsViewTests(TestCase):
         url = reverse('cars:more', args=(1,))
         response = self.client.get(url)
         self.assertEqual(response.status_code, 404)
-
-
-# Create your tests here.

@@ -3,6 +3,7 @@ from django.contrib.auth.admin import UserAdmin
 from accounts.models import User
 from accounts.forms import RegisterUser, EditUser
 
+
 class UserAdmin(UserAdmin):
     add_form = RegisterUser
     form = EditUser

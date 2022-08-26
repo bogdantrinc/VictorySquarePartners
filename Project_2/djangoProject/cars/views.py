@@ -1,10 +1,10 @@
 from django.contrib import messages
+from django.contrib.messages.views import SuccessMessageMixin
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth import login, authenticate, logout, get_user_model
 from django.contrib.auth.forms import AuthenticationForm, PasswordChangeForm
 from django.contrib.auth.views import PasswordChangeView, PasswordResetView, PasswordResetConfirmView
-from django.contrib.auth.decorators import login_required
-from django.contrib.auth.mixins import LoginRequiredMixin
-from django.contrib.messages.views import SuccessMessageMixin
 from django.core.paginator import Paginator
 from django.db.models import Q
 from django.urls import reverse_lazy
@@ -55,39 +55,36 @@ class DetailView(LoginRequiredMixin, generic.DetailView):
         return Car.objects.all()
 
 
-class EditUser(LoginRequiredMixin, generic.UpdateView):
+class EditUser(LoginRequiredMixin, SuccessMessageMixin, generic.UpdateView):
     login_url = 'login'
     redirect_field_name = None
     form_class = EditUser
     template_name = "cars/account/profile.html"
     success_url = reverse_lazy('cars:index')
+    success_message = "You've updated your profile successfully!"
 
     def get_object(self):
         return self.request.user
 
-    def form_valid(self, form):
-        messages.success(self.request, "You've updated your profile successfully!")
-        return super().form_valid(form)
 
-
-class PasswordChange(LoginRequiredMixin, PasswordChangeView):
+class PasswordChange(LoginRequiredMixin, SuccessMessageMixin, PasswordChangeView):
     login_url = 'login'
     redirect_field_name = None
     form_class = PasswordChangeForm
     template_name = 'cars/account/password.html'
     success_url = reverse_lazy('profile')
-
-    def form_valid(self, form):
-        messages.success(self.request, "You've changed your password successfully!")
-        return super().form_valid(form)
+    success_message = "You've changed your password successfully!"
 
 
-class PasswordReset(SuccessMessageMixin, PasswordResetView):
-    template_name = 'cars/account/password-reset/password-reset.html'
+class PasswordReset(PasswordResetView):
+    template_name = 'cars/account/password-reset/password_reset.html'
     email_template_name = 'cars/account/password-reset/password_reset_email.html'
     subject_template_name = 'cars/account/password-reset/password_reset_subject.txt'
     success_url = reverse_lazy('login')
-    success_message = "We've sent you an email with the reset password details!"
+
+    def form_valid(self, form):
+        messages.info(self.request, "If there is an account with this email, check your email for the reset password details!")
+        return super().form_valid(form)
 
 
 class PasswordResetConfirm(PasswordResetConfirmView):
@@ -95,12 +92,12 @@ class PasswordResetConfirm(PasswordResetConfirmView):
     success_url = reverse_lazy('cars:index')
     post_reset_login = True
 
-    # def dispatch(self, *args, **kwargs):
-    #     dispatch = super().dispatch(*args, **kwargs)
-    #     if not self.validlink:
-    #         messages.error(self.request, "This password reset link has already been used.")
-    #         return redirect('password_reset')
-    #     return dispatch
+    def dispatch(self, *args, **kwargs):
+        dispatch = super().dispatch(*args, **kwargs)
+        if not self.validlink and dispatch.status_code == 200:
+            messages.error(self.request, "This password reset link has already been used.")
+            return redirect('password_reset')
+        return dispatch
 
 
 @login_required(login_url='login', redirect_field_name=None)
@@ -177,4 +174,4 @@ def delete_user_request(request):
     User = get_user_model()
     User.objects.filter(email=user.email).update(is_active=False)
     messages.success(request, f"You have successfully deleted your account: {user.email}")
-    return redirect("cars")
+    return redirect("cars:index")
