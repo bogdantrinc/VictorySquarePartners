@@ -15,7 +15,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include, reverse_lazy
-from django.contrib.auth.views import PasswordResetConfirmView
+from django.contrib.auth import views as auth_views
 from cars import views
 
 urlpatterns = [
@@ -24,8 +24,11 @@ urlpatterns = [
     path('profile/', views.EditUser.as_view(), name='profile'),
     path('password/', views.PasswordChange.as_view(), name='password'),
     path('register/', views.register_request, name='register'),
-    path('login/', views.login_request, name='login'),
-    path('logout/', views.logout_request, name='logout'),
+    path('login/', views.Login.as_view(), name='login'),
+    path('logout/', auth_views.LogoutView.as_view(
+        next_page=reverse_lazy('login'),
+    ),
+         name='logout'),
     path('delete/', views.delete_user_request, name='delete'),
     path('password_reset/', views.PasswordReset.as_view(), name='password_reset'),
     path(

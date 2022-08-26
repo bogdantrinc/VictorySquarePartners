@@ -2,17 +2,16 @@ from django.contrib import messages
 from django.contrib.messages.views import SuccessMessageMixin
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.contrib.auth import login, authenticate, logout, get_user_model
-from django.contrib.auth.forms import AuthenticationForm, PasswordChangeForm
-from django.contrib.auth.views import PasswordChangeView, PasswordResetView, PasswordResetConfirmView
-from django.core.paginator import Paginator
+from django.contrib.auth import login, logout, get_user_model
+from django.contrib.auth.forms import PasswordChangeForm
+from django.contrib.auth.views import LoginView, PasswordChangeView, PasswordResetView, PasswordResetConfirmView
 from django.db.models import Q
 from django.urls import reverse_lazy
 from django.http import Http404
 from django.shortcuts import render, redirect
 from django.views import generic
 from requests.exceptions import JSONDecodeError
-from accounts.forms import RegisterUser, EditUser
+from accounts.forms import RegisterUser, EditUser, FormAuthentication, FormPasswordReset
 from cars.files.cars.api_detail import api_detail
 from cars.models import Car
 
@@ -55,6 +54,12 @@ class DetailView(LoginRequiredMixin, generic.DetailView):
         return Car.objects.all()
 
 
+class Login(LoginView):
+    form_class = FormAuthentication
+    template_name = 'cars/account/login.html'
+    next_page = reverse_lazy('cars:index')
+
+
 class EditUser(LoginRequiredMixin, SuccessMessageMixin, generic.UpdateView):
     login_url = 'login'
     redirect_field_name = None
@@ -77,6 +82,7 @@ class PasswordChange(LoginRequiredMixin, SuccessMessageMixin, PasswordChangeView
 
 
 class PasswordReset(PasswordResetView):
+    form_class = FormPasswordReset
     template_name = 'cars/account/password-reset/password_reset.html'
     email_template_name = 'cars/account/password-reset/password_reset_email.html'
     subject_template_name = 'cars/account/password-reset/password_reset_subject.txt'
@@ -131,6 +137,7 @@ def more_details(request, pk):
             'car_detail': car_detail
         })
 
+
 def register_request(request):
 	if request.method == "POST":
 		form = RegisterUser(request.POST)
@@ -143,29 +150,6 @@ def register_request(request):
 	form = RegisterUser()
 	return render(request=request, template_name="cars/account/register.html", context={"register_form":form})
 
-def login_request(request):
-	if request.method == "POST":
-		form = AuthenticationForm(request, data=request.POST)
-		if form.is_valid():
-			username = form.cleaned_data.get('username')
-			password = form.cleaned_data.get('password')
-			user = authenticate(username=username, password=password)
-			if user is not None:
-				login(request, user)
-				messages.info(request, f"You are now logged in as {username}")
-				return redirect("cars:index")
-			else:
-				messages.error(request,"Invalid username or password.")
-		else:
-			messages.error(request,"Invalid username or password.")
-	form = AuthenticationForm()
-	return render(request=request, template_name="cars/account/login.html", context={"login_form": form})
-
-@login_required(login_url='login', redirect_field_name=None)
-def logout_request(request):
-	logout(request)
-	messages.info(request, "You have successfully logged out.")
-	return redirect("login")
 
 @login_required(login_url='login', redirect_field_name=None)
 def delete_user_request(request):
