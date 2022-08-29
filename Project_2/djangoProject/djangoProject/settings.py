@@ -136,4 +136,11 @@ API_URL_DESCRIBE = os.getenv('API_URL_DESCRIBE')
 API_ACCOUNT_EMAIL = os.getenv('API_ACCOUNT_EMAIL')
 API_ACCOUNT_PASSWORD = os.getenv('API_ACCOUNT_PASSWORD')
 
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = os.getenv('EMAIL_SERVER_EMAIL')
+EMAIL_HOST_PASSWORD = os.getenv('EMAIL_SERVER_PASSWORD')
+EMAIL_USE_TLS = True
+
 AUTH_USER_MODEL = 'accounts.User'

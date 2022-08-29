@@ -1,15 +1,17 @@
 from django.contrib import messages
-from django.contrib.auth import login, authenticate, logout, get_user_model
-from django.contrib.auth.forms import AuthenticationForm, PasswordChangeForm
-from django.contrib.auth.views import PasswordChangeView
-from django.core.paginator import Paginator
+from django.contrib.messages.views import SuccessMessageMixin
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth import login, logout, get_user_model
+from django.contrib.auth.forms import PasswordChangeForm
+from django.contrib.auth.views import LoginView, PasswordChangeView, PasswordResetView, PasswordResetConfirmView
 from django.db.models import Q
 from django.urls import reverse_lazy
 from django.http import Http404
 from django.shortcuts import render, redirect
 from django.views import generic
 from requests.exceptions import JSONDecodeError
-from accounts.forms import RegisterUser, EditUser
+from accounts.forms import RegisterUser, EditUser, FormAuthentication, FormPasswordReset
 from cars.files.cars.api_detail import api_detail
 from cars.models import Car
 
@@ -22,7 +24,9 @@ detail_list = ['title', 'description', 'year', 'trim', 'mileage', 'mileage_unit'
                'sale_price', 'url', 'stock_number']
 
 
-class IndexView(generic.ListView):
+class IndexView(LoginRequiredMixin, generic.ListView):
+    login_url = 'login'
+    redirect_field_name = None
     template_name = 'cars/index.html'
     context_object_name = 'car_list'
     paginate_by = 50
@@ -40,7 +44,9 @@ class IndexView(generic.ListView):
         return vin_list
 
 
-class DetailView(generic.DetailView):
+class DetailView(LoginRequiredMixin, generic.DetailView):
+    login_url = 'login'
+    redirect_field_name = None
     model = Car
     template_name = 'cars/detail.html'
 
@@ -48,29 +54,59 @@ class DetailView(generic.DetailView):
         return Car.objects.all()
 
 
-class EditUser(generic.UpdateView):
+class Login(LoginView):
+    form_class = FormAuthentication
+    template_name = 'cars/account/login.html'
+    next_page = reverse_lazy('cars:index')
+
+
+class EditUser(LoginRequiredMixin, SuccessMessageMixin, generic.UpdateView):
+    login_url = 'login'
+    redirect_field_name = None
     form_class = EditUser
     template_name = "cars/account/profile.html"
     success_url = reverse_lazy('cars:index')
+    success_message = "You've updated your profile successfully!"
 
     def get_object(self):
         return self.request.user
 
-    def form_valid(self, form):
-        messages.success(self.request, "You've updated your profile successfully!")
-        return super().form_valid(form)
 
-
-class PasswordChange(PasswordChangeView):
+class PasswordChange(LoginRequiredMixin, SuccessMessageMixin, PasswordChangeView):
+    login_url = 'login'
+    redirect_field_name = None
     form_class = PasswordChangeForm
     template_name = 'cars/account/password.html'
     success_url = reverse_lazy('profile')
+    success_message = "You've changed your password successfully!"
+
+
+class PasswordReset(PasswordResetView):
+    form_class = FormPasswordReset
+    template_name = 'cars/account/password-reset/password_reset.html'
+    email_template_name = 'cars/account/password-reset/password_reset_email.html'
+    subject_template_name = 'cars/account/password-reset/password_reset_subject.txt'
+    success_url = reverse_lazy('login')
 
     def form_valid(self, form):
-        messages.success(self.request, "You've changed your password successfully!")
+        messages.info(self.request, "If there is an account with this email, check your email for the reset password details!")
         return super().form_valid(form)
 
 
+class PasswordResetConfirm(PasswordResetConfirmView):
+    template_name = 'cars/account/password-reset/password_reset_confirm.html'
+    success_url = reverse_lazy('cars:index')
+    post_reset_login = True
+
+    def dispatch(self, *args, **kwargs):
+        dispatch = super().dispatch(*args, **kwargs)
+        if not self.validlink and dispatch.status_code == 200:
+            messages.error(self.request, "This password reset link has already been used.")
+            return redirect('password_reset')
+        return dispatch
+
+
+@login_required(login_url='login', redirect_field_name=None)
 def more_details(request, pk):
     car_queryset = Car.objects.filter(pk=pk)
     try:
@@ -101,6 +137,7 @@ def more_details(request, pk):
             'car_detail': car_detail
         })
 
+
 def register_request(request):
 	if request.method == "POST":
 		form = RegisterUser(request.POST)
@@ -113,33 +150,12 @@ def register_request(request):
 	form = RegisterUser()
 	return render(request=request, template_name="cars/account/register.html", context={"register_form":form})
 
-def login_request(request):
-	if request.method == "POST":
-		form = AuthenticationForm(request, data=request.POST)
-		if form.is_valid():
-			username = form.cleaned_data.get('username')
-			password = form.cleaned_data.get('password')
-			user = authenticate(username=username, password=password)
-			if user is not None:
-				login(request, user)
-				messages.info(request, f"You are now logged in as {username}")
-				return redirect("cars:index")
-			else:
-				messages.error(request,"Invalid username or password.")
-		else:
-			messages.error(request,"Invalid username or password.")
-	form = AuthenticationForm()
-	return render(request=request, template_name="cars/account/login.html", context={"login_form": form})
 
-def logout_request(request):
-	logout(request)
-	messages.info(request, "You have successfully logged out.")
-	return redirect("/login/")
-
+@login_required(login_url='login', redirect_field_name=None)
 def delete_user_request(request):
     user = request.user
     logout(request)
     User = get_user_model()
     User.objects.filter(email=user.email).update(is_active=False)
     messages.success(request, f"You have successfully deleted your account: {user.email}")
-    return redirect("/cars/")
+    return redirect("cars:index")

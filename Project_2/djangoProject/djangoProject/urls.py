@@ -13,18 +13,27 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
-from django.contrib.auth.decorators import login_required
 from django.contrib import admin
-from django.urls import path, include
+from django.urls import path, include, reverse_lazy
+from django.contrib.auth import views as auth_views
 from cars import views
 
 urlpatterns = [
     path('cars/', include('cars.urls')),
     path('admin/', admin.site.urls),
-    path('profile/', login_required(views.EditUser.as_view(), login_url='/login/'), name='profile'),
-    path('password/', login_required(views.PasswordChange.as_view(), login_url='/login/'), name='password'),
+    path('profile/', views.EditUser.as_view(), name='profile'),
+    path('password/', views.PasswordChange.as_view(), name='password'),
     path('register/', views.register_request, name='register'),
-    path('login/', views.login_request, name='login'),
-    path('logout/', login_required(views.logout_request, login_url='/login/'), name= 'logout'),
-    path('delete/', login_required(views.delete_user_request, login_url='/login/'), name= 'delete'),
+    path('login/', views.Login.as_view(), name='login'),
+    path('logout/', auth_views.LogoutView.as_view(
+        next_page=reverse_lazy('login'),
+    ),
+         name='logout'),
+    path('delete/', views.delete_user_request, name='delete'),
+    path('password_reset/', views.PasswordReset.as_view(), name='password_reset'),
+    path(
+        'password-reset-confirm/<uidb64>/<token>/',
+        views.PasswordResetConfirm.as_view(),
+        name='password_reset_confirm'
+    ),
 ]

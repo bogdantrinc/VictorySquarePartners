@@ -1,6 +1,6 @@
 from django import forms
 from django.core.exceptions import ValidationError
-from django.contrib.auth.forms import UserCreationForm, UserChangeForm
+from django.contrib.auth.forms import UserCreationForm, UserChangeForm, AuthenticationForm, PasswordResetForm
 from accounts.models import User
 
 
@@ -56,3 +56,18 @@ class EditUser(UserChangeForm):
 	class Meta:
 		model = User
 		fields = ('email', 'first_name', 'last_name', 'address')
+
+
+class FormAuthentication(AuthenticationForm):
+
+	def __init__(self, request=None, *args, **kwargs):
+		super().__init__(request=request, *args, **kwargs)
+		self.fields['username'].widget.attrs.update({'class': 'form-control'})
+		self.fields['password'].widget.attrs.update({'class': 'form-control'})
+
+
+class FormPasswordReset(PasswordResetForm):
+
+	def __init__(self, *args, **kwargs):
+		super().__init__(*args, **kwargs)
+		self.fields['email'].widget.attrs.update({'class': 'form-control'})
