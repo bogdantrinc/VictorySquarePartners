@@ -16,12 +16,19 @@
                     <th style="font-weight:bold">Vehicle Identification number (VIN)</th>
                     <th style="font-weight:bold">Make</th>
                     <th style="font-weight:bold">Model</th>
+                    <th style="font-weight:bold">Order</th>
                 </tr>
             {% for car in car_list %}
                 <tr>
                     <th><a href="{% url 'cars:detail' car.id %}">{{ car.vin }}</a></th>
                     <th>{{ car.make }}</th>
                     <th>{{ car.model }}</th>
+                    <th>
+                        <form action="{% url 'cars:cart' %}" method="post">
+                            {% csrf_token %}
+                            <button name="car_id" value="{{ car.id }}" type="submit" class="btn btn-dark container" style="font-size: 17px">Add to cart</button>
+                        </form>
+                    </th>
                 </tr>
             {% endfor %}
             </table>

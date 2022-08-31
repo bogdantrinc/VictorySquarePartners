@@ -1,0 +1,11 @@
+{% extends "cars/header.html" %}
+{% block title %}Car Checkout{% endblock %}
+{% block page_title %}<a href="{% url 'cars:cart' %}" style="color: black; text-decoration: none;">Car Checkout</a>{% endblock %}
+{% block card_content %}
+    {% load crispy_forms_tags %}
+    {{ form|crispy }}
+{% endblock %}
+{% block card_button %}Buy{% endblock %}
+{% block card_footer %}
+    <p class="text-center">If you've changed your mind, go back to your <a href="{% url 'cars:cart' %}">cart</a>.</p>
+{% endblock %}

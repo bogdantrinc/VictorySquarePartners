@@ -1,6 +1,6 @@
 from django.contrib import messages
 from django.contrib.messages.views import SuccessMessageMixin
-from django.contrib.auth.decorators import login_required, permission_required
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth import login, logout, get_user_model
 from django.contrib.auth.forms import PasswordChangeForm
@@ -9,11 +9,11 @@ from django.db.models import Q
 from django.urls import reverse_lazy
 from django.http import Http404
 from django.shortcuts import render, redirect
-from django.views import generic
+from django.views import View, generic
 from requests.exceptions import JSONDecodeError
 from accounts.forms import RegisterUser, EditUser, FormAuthentication, FormPasswordReset
 from cars.files.cars.api_detail import api_detail
-from cars.models import Car
+from cars.models import Car, Order
 
 
 detail_list = ['title', 'description', 'year', 'trim', 'mileage', 'mileage_unit', 'transmission_type', 'fuel_type',
@@ -37,10 +37,11 @@ class IndexView(LoginRequiredMixin, generic.ListView):
         Return a list with cars.
         """
         query = self.request.GET.get("vin")
+        available = Car.objects.filter(availability=True)
         if query:
-            vin_list = Car.objects.filter(Q(vin__contains=query) | Q(make__contains=query) | Q(model__contains=query))
+            vin_list = available.filter(Q(vin__contains=query) | Q(make__contains=query) | Q(model__contains=query))
         else:
-            vin_list = Car.objects.all()
+            vin_list = available.all()
         return vin_list
 
 
@@ -141,6 +142,39 @@ def more_details(request, pk):
         return render(request, 'cars/detail.html', {
             'car': car_queryset.first(),
         })
+
+
+class Cart(LoginRequiredMixin, View):
+    login_url = 'login'
+    redirect_field_name = None
+    template_name = 'cars/cart.html'
+    context_object_name = 'cart_list'
+
+    def get(self, request, *args, **kwargs):
+        car_id_list = request.session.get('car_id_list', [])
+        car_id_remove = request.GET.get('remove')
+        car_id_list = [car_id for car_id in car_id_list if car_id != car_id_remove]
+        request.session['car_id_list'] = car_id_list
+        cart_list = Car.objects.filter(id__in=car_id_list)
+        return render(request, self.template_name, {'cart_list': cart_list, 'car_id_list': car_id_list})
+
+    def post(self, request, *args, **kwargs):
+        car_id = request.POST['car_id']
+        car_id_list = request.session.get('car_id_list', [])
+        if car_id in car_id_list:
+            messages.info(request, "You've already added this product!")
+        else:
+            car_id_list = car_id_list + list(car_id)
+        request.session['car_id_list'] = car_id_list
+        cart_list = Car.objects.filter(id__in=car_id_list)
+        print("CART IDs: ", car_id_list, "Cart List: ", cart_list)
+        return render(request, self.template_name, {'cart_list': cart_list, 'car_id_list': car_id_list})
+
+
+@login_required(login_url='login', redirect_field_name=None)
+def checkout(request, pk):
+    form = None
+    return render(request, 'cars/checkout.html', {'form': form})
 
 
 def register_request(request):
