@@ -1,6 +1,6 @@
 from django.contrib import messages
 from django.contrib.messages.views import SuccessMessageMixin
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth import login, logout, get_user_model
 from django.contrib.auth.forms import PasswordChangeForm
@@ -105,36 +105,41 @@ class PasswordResetConfirm(PasswordResetConfirmView):
             return redirect('password_reset')
         return dispatch
 
-
 @login_required(login_url='login', redirect_field_name=None)
 def more_details(request, pk):
     car_queryset = Car.objects.filter(pk=pk)
-    try:
-        car = car_queryset.first()
-        if not car.described:
-            get_api_data = api_detail(car.vin)
-            api_data = {key: value for key, value in get_api_data.items() if value is not None}
-            get_car_detail = Car.objects.filter(pk=pk).values()[0]
-            for detail_name in get_car_detail:
-                if detail_name in api_data:
-                    setattr(car, detail_name, api_data[detail_name])
-            car.described = True
-            car.save()
-        car_detail = car_queryset.values(*detail_list)[0]
+    if request.user.is_premium:
+        try:
+            car = car_queryset.first()
+            if not car.described:
+                get_api_data = api_detail(car.vin)
+                api_data = {key: value for key, value in get_api_data.items() if value is not None}
+                get_car_detail = Car.objects.filter(pk=pk).values()[0]
+                for detail_name in get_car_detail:
+                    if detail_name in api_data:
+                        setattr(car, detail_name, api_data[detail_name])
+                car.described = True
+                car.save()
+            car_detail = car_queryset.values(*detail_list)[0]
 
-    except JSONDecodeError:
-        messages.error(request, "Couldn't fetch more data from the server.")
-        return render(request, 'cars/detail.html', {
-            'car': car,
-        })
+        except JSONDecodeError:
+            messages.error(request, "Couldn't fetch more data from the server.")
+            return render(request, 'cars/detail.html', {
+                'car': car,
+            })
 
-    except (Car.DoesNotExist, IndexError):
-        raise Http404("Car does not exist!")
+        except (Car.DoesNotExist, IndexError):
+            raise Http404("Car does not exist!")
 
+        else:
+            return render(request, 'cars/detail.html', {
+                'car': car,
+                'car_detail': car_detail
+            })
     else:
+        messages.info(request, "Only premium accounts can use this functionality!")
         return render(request, 'cars/detail.html', {
-            'car': car,
-            'car_detail': car_detail
+            'car': car_queryset.first(),
         })
 
 

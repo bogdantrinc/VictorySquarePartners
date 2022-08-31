@@ -7,7 +7,8 @@ from django.utils.translation import gettext_lazy as _
 class User(AbstractUser):
     username = None
     email = models.EmailField(_('email address'), unique=True)
-    address =models.CharField(max_length=100, default='', blank=True)
+    address = models.CharField(max_length=100, default='', blank=True)
+    is_premium = models.BooleanField(default=False, verbose_name='Premium')
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
