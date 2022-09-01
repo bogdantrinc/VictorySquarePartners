@@ -58,7 +58,7 @@ class Car(models.Model):
 class Order(models.Model):
     customer = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
     product = models.ManyToManyField(Car)
-    quantity = models.IntegerField(default=1)
+    quantity = models.IntegerField(validators=[MinValueValidator(0)], default=1)
     price = models.FloatField(validators=[MinValueValidator(0)], null=True)
     address = models.CharField(max_length=100, default='', blank=True)
     date = models.DateField(auto_now_add=True)

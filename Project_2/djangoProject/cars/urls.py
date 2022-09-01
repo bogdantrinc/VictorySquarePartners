@@ -7,5 +7,5 @@ urlpatterns = [
     path('<int:pk>/', views.DetailView.as_view(), name='detail'),
     path('<int:pk>/more/', views.more_details, name='more'),
     path('cart/', views.Cart.as_view(), name='cart'),
-    path('checkout/<int:pk>/', views.checkout, name='checkout'),
+    path('checkout/', views.Checkout.as_view(), name='checkout'),
 ]

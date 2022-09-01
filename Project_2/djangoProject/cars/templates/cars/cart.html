@@ -41,11 +41,15 @@
                 <p class="text-center" style="font-size: 200%">Add products to your cart.</p>
             {% endif %}
         </div>
-        <form action="{% url 'cars:checkout' 1 %}" method="get">
-            <div class="btn-group container" style="padding: 7px">
-                <button type="submit" class="btn btn-dark container" style="font-size: 17px; margin: 5px; border-radius: 10px">Add more</button>
-                <button type="submit" class="btn btn-primary container" style="font-size: 17px; margin: 5px; border-radius: 10px">Checkout</button>
+        <div class="btn-group">
+            <div class="container">
+                <a href="{% url 'cars:index' %}" type="submit" class="btn btn-dark container" style="font-size: 17px; border-radius: 10px">Add more</a>
             </div>
-        </form>
+            <div class="container">
+                <form action="{% url 'cars:checkout' %}" method="get">
+                    <button type="submit" class="btn btn-primary container" style="font-size: 17px; border-radius: 10px">Checkout</button>
+                </form>
+            </div>
+        </div>
     </div>
 {% endblock %}

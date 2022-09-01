@@ -10,10 +10,13 @@ from django.urls import reverse_lazy
 from django.http import Http404
 from django.shortcuts import render, redirect
 from django.views import View, generic
+from django.views.generic.edit import CreateView
+from django.forms import MultiWidget, TextInput
 from requests.exceptions import JSONDecodeError
 from accounts.forms import RegisterUser, EditUser, FormAuthentication, FormPasswordReset
 from cars.files.cars.api_detail import api_detail
 from cars.models import Car, Order
+from cars.forms import CheckoutForm
 
 
 detail_list = ['title', 'description', 'year', 'trim', 'mileage', 'mileage_unit', 'transmission_type', 'fuel_type',
@@ -167,14 +170,35 @@ class Cart(LoginRequiredMixin, View):
             car_id_list = car_id_list + list(car_id)
         request.session['car_id_list'] = car_id_list
         cart_list = Car.objects.filter(id__in=car_id_list)
-        print("CART IDs: ", car_id_list, "Cart List: ", cart_list)
         return render(request, self.template_name, {'cart_list': cart_list, 'car_id_list': car_id_list})
 
 
-@login_required(login_url='login', redirect_field_name=None)
-def checkout(request, pk):
-    form = None
-    return render(request, 'cars/checkout.html', {'form': form})
+class Checkout(LoginRequiredMixin, SuccessMessageMixin, CreateView):
+    login_url = 'login'
+    redirect_field_name = None
+    template_name = 'cars/checkout.html'
+    form_class = CheckoutForm
+    context_object_name = 'cart_list'
+    success_url = reverse_lazy('cars:index')
+    success_message = "Congrats! Your products are on their way to you."
+
+    def get_initial(self):
+        initial = super(Checkout, self).get_initial()
+        car_id_list = self.request.session.get('car_id_list', [])
+        products = Car.objects.filter(id__in=car_id_list)
+        if self.request.user.is_authenticated:
+            initial.update({
+                'customer': get_user_model().objects.filter(email=self.request.user).first(),
+                'product': products,
+                'quantity': len(car_id_list),
+                'price': sum([item.sale_price for item in products]),
+                'address': self.request.user.address,
+            })
+        return initial
+    
+    def form_valid(self, form):
+        self.request.session['car_id_list'] = []
+        return super(Checkout, self).form_valid(form)
 
 
 def register_request(request):
