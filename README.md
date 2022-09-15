@@ -13,7 +13,7 @@ Nice to have functionalities:
 - order history on profile page
 - cancel order functionality along with a notification on email
 - send a confirmation email with the order details
-- actual payment system (using a cryptocurrency API as a proof of concept)
+- actual payment system (using Stripe or a cryptocurrency API as a proof of concept)
 - profile image + default profile image
 - default car image
 - cancel order + refund functionality
