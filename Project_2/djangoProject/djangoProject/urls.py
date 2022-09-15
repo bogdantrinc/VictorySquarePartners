@@ -30,7 +30,7 @@ urlpatterns = [
     ),
          name='logout'),
     path('delete/', views.delete_user_request, name='delete'),
-    path('password_reset/', views.PasswordReset.as_view(), name='password_reset'),
+    path('password-reset/', views.PasswordReset.as_view(), name='password_reset'),
     path(
         'password-reset-confirm/<uidb64>/<token>/',
         views.PasswordResetConfirm.as_view(),

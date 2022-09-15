@@ -1,0 +1,55 @@
+{% extends "cars/header.html" %}
+{% load static %}
+{% block title %}Car Order{% endblock %}
+{% block page_title %}<a href="{% url 'cars:index' %}" style="color: black; text-decoration: none;">Car Order</a>{% endblock %}
+{% block content %}
+    <div class="container d-grid col-9">
+        <div class="page_list d-grid">
+            {% include 'cars/includes/messages.html' %}
+            {% if cart_list %}
+                <table id="customers">
+                    <tr>
+                        <th style="font-weight:bold">Image:</th>
+                        <th style="font-weight:bold">VIN:</th>
+                        <th style="font-weight:bold">Title:</th>
+                        <th style="font-weight:bold">Quantity:</th>
+                        <th style="font-weight:bold">Price:</th>
+                        <th style="font-weight:bold"></th>
+                    </tr>
+                    {% for car in cart_list %}
+                        <tr>
+                            <th style="font-weight:bold">
+                                {% if car.image_url %}
+                                    <div class="text-center"><img src="{{ car.image_url }}" alt="No car available." class="car_image" style="border-radius: 10px; padding-bottom: 0px;"></div>
+                                {% else %}
+                                    <div class="text-center"><img src="{% static 'cars/images/no_car.svg' %}" alt="No car available." class="car_image" style="border-radius: 10px; padding-bottom: 0px;"></div>
+                                {% endif %}
+                            </th>
+                            <th>{{ car.vin }}</th>
+                            <th>{{ car.title }}</th>
+                            <th>{{ car.stock_number }}</th>
+                            <th>{{ car.sale_price }}</th>
+                            <th>
+                                <form action="{% url 'cars:cart' %}" method="get">
+                                    <button name="remove" value="{{ car.id }}" type="submit" class="btn btn-dark container" style="font-size: 17px">Remove</button>
+                                </form>
+                            </th>
+                        </tr>
+                    {% endfor %}
+                </table>
+            {% else %}
+                <p class="text-center" style="font-size: 200%">Add products to your cart.</p>
+            {% endif %}
+        </div>
+        <div class="btn-group">
+            <div class="container">
+                <a href="{% url 'cars:index' %}" type="submit" class="btn btn-dark container" style="font-size: 17px; border-radius: 10px">Add more</a>
+            </div>
+            <div class="container">
+                <form action="{% url 'cars:checkout' %}" method="get">
+                    <button type="submit" class="btn btn-primary container" style="font-size: 17px; border-radius: 10px">Checkout</button>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}

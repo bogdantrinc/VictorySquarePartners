@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib import admin
+from django.contrib.auth import get_user_model
 from django.core.validators import MinLengthValidator, RegexValidator, MaxValueValidator, MinValueValidator
 from django.utils import timezone
 
@@ -41,7 +42,7 @@ class Car(models.Model):
     fuel_economy_city_unit = models.CharField(max_length=100, default='')
     fuel_economy_highway = models.PositiveSmallIntegerField(null=True)
     fuel_economy_highway_unit = models.CharField(max_length=100, default='')
-    availability = models.BooleanField(null=True)
+    availability = models.BooleanField(default=True)
     image_url = models.URLField(null=True)
     normalized_make = models.CharField(max_length=100, default='')
     grouped_body_style = models.CharField(max_length=100, default='')
@@ -52,3 +53,13 @@ class Car(models.Model):
 
     def __str__(self):
         return self.vin
+
+
+class Order(models.Model):
+    customer = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
+    product = models.ManyToManyField(Car)
+    quantity = models.IntegerField(validators=[MinValueValidator(0)], default=1)
+    price = models.FloatField(validators=[MinValueValidator(0)], null=True)
+    address = models.CharField(max_length=100, default='', blank=True)
+    date = models.DateField(auto_now_add=True)
+    status = models.BooleanField(default=False)
