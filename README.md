@@ -1,4 +1,4 @@
-# VictorySquarePartners
+# Victory Square Partners
 Summer practice at Victory Square Partners 2022
 
 Problems that are not solved yet:
